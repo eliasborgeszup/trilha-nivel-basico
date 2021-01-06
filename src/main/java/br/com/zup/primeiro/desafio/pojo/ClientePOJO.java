@@ -3,10 +3,10 @@ package br.com.zup.primeiro.desafio.pojo;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientePOJO {
