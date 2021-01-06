@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,10 @@ public class ClienteController {
 	public MensagemDTO alterarCliente(@PathVariable String cpf, @RequestBody ClienteDTO cliente)
 			throws GenericException {
 		return dao.alterarCliente(cpf, cliente);
+	}
+
+	@DeleteMapping(value = "/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public MensagemDTO excluirCliente(@PathVariable String cpf) throws GenericException {
+		return dao.excluirCliente(cpf);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.zup.primeiro.desafio.connection.factory.ConnectionFactory;
 import br.com.zup.primeiro.desafio.dto.ClienteDTO;
@@ -17,6 +18,7 @@ import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @Service
 public class ClienteDAO {
+	private static final String CLIENTE_EXCLUIDO_COM_SUCESSO = "Cliente excluido com sucesso!";
 	private static final String CLIENTE_ALTERADO_COM_SUCESSO = "Cliente alterado com sucesso!";
 	private static final String NÃO_POSSUI_CLIENTES_CADADASTRADOS = "Infelizmente não foi possivel realizar a operação, não possui clientes cadadastrados.";
 	private static final String CPF_INEXISTENTE = "Infelizmente não foi possivel realizar a operação, CPF inexistente.";
@@ -113,8 +115,7 @@ public class ClienteDAO {
 		}
 
 		String alterarClienteSql = "UPDATE cliente "
-				+ "SET nome = ?, data_nascimento = ?, email = ?, telefone = ?, endereco = ?"
-				+ "WHERE cpf = ?";
+				+ "SET nome = ?, data_nascimento = ?, email = ?, telefone = ?, endereco = ?" + "WHERE cpf = ?";
 
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(alterarClienteSql);
@@ -124,9 +125,9 @@ public class ClienteDAO {
 			stmt.setString(3, cliente.getEmail());
 			stmt.setString(4, cliente.getTelefone());
 			stmt.setString(5, cliente.getEndereco());
-			
+
 			stmt.setString(6, cpf);
-			
+
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -134,6 +135,26 @@ public class ClienteDAO {
 		}
 
 		return new MensagemDTO(CLIENTE_ALTERADO_COM_SUCESSO);
+	}
+
+	public MensagemDTO excluirCliente(String cpf) throws GenericException {
+		if (!verificarExistenciaCpf(cpf)) {
+			throw new GenericException(CPF_INEXISTENTE);
+		}
+
+		String deletarClienteSql = "DELETE FROM cliente WHERE cpf = ?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(deletarClienteSql);
+			stmt.setString(1, cpf);
+
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
+		}
+
+		return new MensagemDTO(CLIENTE_EXCLUIDO_COM_SUCESSO);
 	}
 
 	public ClientePOJO instanciarCidade(ResultSet rs) throws SQLException {
