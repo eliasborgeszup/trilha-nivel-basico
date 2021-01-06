@@ -10,12 +10,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.zup.primeiro.desafio.connection.factory.ConnectionFactory;
+import br.com.zup.primeiro.desafio.dto.ClienteDTO;
 import br.com.zup.primeiro.desafio.dto.MensagemDTO;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @Service
 public class ClienteDAO {
+	private static final String CLIENTE_ALTERADO_COM_SUCESSO = "Cliente alterado com sucesso!";
 	private static final String NÃO_POSSUI_CLIENTES_CADADASTRADOS = "Infelizmente não foi possivel realizar a operação, não possui clientes cadadastrados.";
 	private static final String CPF_INEXISTENTE = "Infelizmente não foi possivel realizar a operação, CPF inexistente.";
 	private static final String OPERACAO_NAO_REALIZADA = "Infelizmente não foi possivel realizar a operação.";
@@ -59,9 +61,9 @@ public class ClienteDAO {
 			PreparedStatement stmt = conexao.prepareStatement(consultarClientesSql);
 
 			ResultSet rs = stmt.executeQuery();
-			
+
 			boolean verificarInexistenciaDadosBD = rs.next() == false;
-			
+
 			if (verificarInexistenciaDadosBD) {
 				throw new GenericException(NÃO_POSSUI_CLIENTES_CADADASTRADOS);
 			} else {
@@ -87,9 +89,9 @@ public class ClienteDAO {
 			stmt.setString(1, cpf);
 
 			ResultSet rs = stmt.executeQuery();
-			
+
 			boolean verificarInexistenciaDadosBD = rs.next() == false;
-			
+
 			if (verificarInexistenciaDadosBD) {
 				do {
 					cliente = instanciarCidade(rs);
@@ -105,6 +107,35 @@ public class ClienteDAO {
 		return cliente;
 	}
 
+	public MensagemDTO alterarCliente(String cpf, ClienteDTO cliente) throws GenericException {
+		if (!verificarExistenciaCpf(cpf)) {
+			throw new GenericException(CPF_INEXISTENTE);
+		}
+
+		String alterarClienteSql = "UPDATE cliente "
+				+ "SET nome = ?, data_nascimento = ?, email = ?, telefone = ?, endereco = ?"
+				+ "WHERE cpf = ?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(alterarClienteSql);
+
+			stmt.setString(1, cliente.getNome());
+			stmt.setDate(2, cliente.getDataNascimento());
+			stmt.setString(3, cliente.getEmail());
+			stmt.setString(4, cliente.getTelefone());
+			stmt.setString(5, cliente.getEndereco());
+			
+			stmt.setString(6, cpf);
+			
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
+		}
+
+		return new MensagemDTO(CLIENTE_ALTERADO_COM_SUCESSO);
+	}
+
 	public ClientePOJO instanciarCidade(ResultSet rs) throws SQLException {
 		ClientePOJO cliente = new ClientePOJO();
 
@@ -118,4 +149,24 @@ public class ClienteDAO {
 		return cliente;
 	}
 
+	public boolean verificarExistenciaCpf(String cpf) throws GenericException {
+		try {
+			String consultarClientePorCpf = "SELECT * FROM cliente WHERE cliente.cpf = ?";
+
+			PreparedStatement stmt = conexao.prepareStatement(consultarClientePorCpf);
+			stmt.setString(1, cpf);
+
+			ResultSet rs = stmt.executeQuery();
+			boolean verificarInexistenciaDadosBD = rs.next() == false;
+
+			if (verificarInexistenciaDadosBD) {
+				return false;
+			}
+
+		} catch (SQLException e) {
+			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
+		}
+
+		return true;
+	}
 }
