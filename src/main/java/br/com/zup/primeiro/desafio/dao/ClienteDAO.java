@@ -15,6 +15,7 @@ import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @Service
 public class ClienteDAO {
+	private static final String CPF_INVALIDO = "CPF Invalido!";
 	private static final String OPERACAO_NAO_REALIZADA = "Infelizmente não foi possivel realizar a operação.";
 	private static final String CLIENTE_CADASTRADO_COM_SUCESSO = "Cliente cadastrado com sucesso!";
 	private Connection conexao;
@@ -48,16 +49,18 @@ public class ClienteDAO {
 
 	public List<ClientePOJO> listarClientes() throws SQLException {
 		List<ClientePOJO> clientes = new ArrayList<>();
-		
+
 		String consultarClientesSql = "SELECT * FROM cliente";
-		
+
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(consultarClientesSql);
-			
-			ResultSet rs = stmt.executeQuery();
 
+			ResultSet rs = stmt.executeQuery();
+			
+			//CASO NÃO TENHA CLIENTE THROWS
+			
 			while (rs.next()) {
-				ClientePOJO cliente = instanciaCidade(rs);
+				ClientePOJO cliente = instanciarCidade(rs);
 				clientes.add(cliente);
 			}
 		} catch (SQLException e) {
@@ -65,17 +68,43 @@ public class ClienteDAO {
 		}
 		return clientes;
 	}
-	
-	public ClientePOJO instanciaCidade(ResultSet rs) throws SQLException {
+
+	public ClientePOJO listarClientePorCpf(String cpf) throws SQLException {
 		ClientePOJO cliente = new ClientePOJO();
-		
+
+		String consultarClientePorCpf = "SELECT * FROM cliente WHERE cliente.cpf = ?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(consultarClientePorCpf);
+			stmt.setString(1, cpf);
+
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next() == false) {
+				throw new SQLException(CPF_INVALIDO);
+			}
+			
+			while (rs.next()) {
+				cliente = instanciarCidade(rs);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(OPERACAO_NAO_REALIZADA + e.getMessage());
+		}
+
+		return cliente;
+	}
+
+	public ClientePOJO instanciarCidade(ResultSet rs) throws SQLException {
+		ClientePOJO cliente = new ClientePOJO();
+
 		cliente.setNome(rs.getString("nome"));
 		cliente.setDataNascimento(rs.getDate("data_nascimento"));
 		cliente.setCpf(rs.getString("cpf"));
 		cliente.setEmail(rs.getString("email"));
 		cliente.setTelefone(rs.getString("telefone"));
-		cliente.setEndereco(rs.getString("endereco"));	
-		
+		cliente.setEndereco(rs.getString("endereco"));
+
 		return cliente;
 	}
+
 }
