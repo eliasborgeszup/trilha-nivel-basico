@@ -16,8 +16,8 @@ import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @Service
 public class ClienteDAO {
-	private static final String NÃO_POSSUI_CLIENTES_CADADASTRADOS = "Não possui clientes cadadastrados.";
-	private static final String CPF_INVALIDO = "CPF Invalido!";
+	private static final String NÃO_POSSUI_CLIENTES_CADADASTRADOS = "Infelizmente não foi possivel realizar a operação, não possui clientes cadadastrados.";
+	private static final String CPF_INEXISTENTE = "Infelizmente não foi possivel realizar a operação, CPF inexistente.";
 	private static final String OPERACAO_NAO_REALIZADA = "Infelizmente não foi possivel realizar a operação.";
 	private static final String CLIENTE_CADASTRADO_COM_SUCESSO = "Cliente cadastrado com sucesso!";
 
@@ -59,15 +59,18 @@ public class ClienteDAO {
 			PreparedStatement stmt = conexao.prepareStatement(consultarClientesSql);
 
 			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next() == false) {
+			
+			boolean verificarInexistenciaDadosBD = rs.next() == false;
+			
+			if (verificarInexistenciaDadosBD) {
 				throw new GenericException(NÃO_POSSUI_CLIENTES_CADADASTRADOS);
+			} else {
+				do {
+					ClientePOJO cliente = instanciarCidade(rs);
+					clientes.add(cliente);
+				} while (rs.next());
 			}
 
-			while (rs.next()) {
-				ClientePOJO cliente = instanciarCidade(rs);
-				clientes.add(cliente);
-			}
 		} catch (SQLException e) {
 			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
 		}
@@ -84,14 +87,17 @@ public class ClienteDAO {
 			stmt.setString(1, cpf);
 
 			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next() == false) {
-				throw new GenericException(CPF_INVALIDO);
+			
+			boolean verificarInexistenciaDadosBD = rs.next() == false;
+			
+			if (verificarInexistenciaDadosBD) {
+				do {
+					cliente = instanciarCidade(rs);
+				} while (rs.next());
+			} else {
+				throw new GenericException(CPF_INEXISTENTE);
 			}
 
-			while (rs.next()) {
-				cliente = instanciarCidade(rs);
-			}
 		} catch (SQLException e) {
 			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
 		}
