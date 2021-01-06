@@ -1,6 +1,5 @@
 package br.com.zup.primeiro.desafio.controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.primeiro.desafio.dao.ClienteDAO;
 import br.com.zup.primeiro.desafio.dto.MensagemDTO;
+import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @RestController
@@ -22,19 +22,19 @@ public class ClienteController {
 
 	@Autowired
 	ClienteDAO dao;
-	
-	@PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+
+	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public MensagemDTO adicionarCliente(@RequestBody ClientePOJO cliente) {
 		return dao.adicionarCliente(cliente);
 	}
-	
-	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-	public List<ClientePOJO> listarClientes() throws SQLException{
+
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+	public List<ClientePOJO> listarClientes() throws GenericException {
 		return dao.listarClientes();
 	}
-	
-	@GetMapping(value = "/{cpf}", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ClientePOJO listarClientePorCpf(@PathVariable String cpf) throws SQLException {
+
+	@GetMapping(value = "/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ClientePOJO listarClientePorCpf(@PathVariable String cpf) throws GenericException {
 		return dao.listarClientePorCpf(cpf);
 	}
 }

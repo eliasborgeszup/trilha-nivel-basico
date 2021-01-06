@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 
 import br.com.zup.primeiro.desafio.connection.factory.ConnectionFactory;
 import br.com.zup.primeiro.desafio.dto.MensagemDTO;
+import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.pojo.ClientePOJO;
 
 @Service
 public class ClienteDAO {
+	private static final String NÃO_POSSUI_CLIENTES_CADADASTRADOS = "Não possui clientes cadadastrados.";
 	private static final String CPF_INVALIDO = "CPF Invalido!";
 	private static final String OPERACAO_NAO_REALIZADA = "Infelizmente não foi possivel realizar a operação.";
 	private static final String CLIENTE_CADASTRADO_COM_SUCESSO = "Cliente cadastrado com sucesso!";
+
 	private Connection conexao;
 
 	public ClienteDAO() {
@@ -47,7 +50,7 @@ public class ClienteDAO {
 		return new MensagemDTO(CLIENTE_CADASTRADO_COM_SUCESSO);
 	}
 
-	public List<ClientePOJO> listarClientes() throws SQLException {
+	public List<ClientePOJO> listarClientes() throws GenericException {
 		List<ClientePOJO> clientes = new ArrayList<>();
 
 		String consultarClientesSql = "SELECT * FROM cliente";
@@ -56,20 +59,22 @@ public class ClienteDAO {
 			PreparedStatement stmt = conexao.prepareStatement(consultarClientesSql);
 
 			ResultSet rs = stmt.executeQuery();
-			
-			//CASO NÃO TENHA CLIENTE THROWS
-			
+
+			if (rs.next() == false) {
+				throw new GenericException(NÃO_POSSUI_CLIENTES_CADADASTRADOS);
+			}
+
 			while (rs.next()) {
 				ClientePOJO cliente = instanciarCidade(rs);
 				clientes.add(cliente);
 			}
 		} catch (SQLException e) {
-			throw new SQLException(OPERACAO_NAO_REALIZADA + e.getMessage());
+			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
 		}
 		return clientes;
 	}
 
-	public ClientePOJO listarClientePorCpf(String cpf) throws SQLException {
+	public ClientePOJO listarClientePorCpf(String cpf) throws GenericException {
 		ClientePOJO cliente = new ClientePOJO();
 
 		String consultarClientePorCpf = "SELECT * FROM cliente WHERE cliente.cpf = ?";
@@ -79,16 +84,16 @@ public class ClienteDAO {
 			stmt.setString(1, cpf);
 
 			ResultSet rs = stmt.executeQuery();
-			
-			if(rs.next() == false) {
-				throw new SQLException(CPF_INVALIDO);
+
+			if (rs.next() == false) {
+				throw new GenericException(CPF_INVALIDO);
 			}
-			
+
 			while (rs.next()) {
 				cliente = instanciarCidade(rs);
 			}
 		} catch (SQLException e) {
-			throw new SQLException(OPERACAO_NAO_REALIZADA + e.getMessage());
+			throw new GenericException(OPERACAO_NAO_REALIZADA + e.getMessage());
 		}
 
 		return cliente;
