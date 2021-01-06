@@ -1,0 +1,12 @@
+CREATE TABLE cliente (
+idCliente INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(45) NOT NULL,
+data_nascimento DATE NOT NULL,
+cpf VARCHAR(11) NOT NULL UNIQUE,
+email VARCHAR(255) NOT NULL,
+telefone VARCHAR(11) NOT NULL,
+endereco VARCHAR(255) NOT NULL
+);
+
+INSERT INTO cliente (nome, data_nascimento, cpf, email, telefone, endereco)
+values ("Elias Borges", "1997-01-03", "10502544651", "eliasborges@unipam.edu.br", "34992454428", "Rua Vereador Justo Machado de Brito, 61")
