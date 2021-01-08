@@ -5,7 +5,6 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,31 +28,31 @@ public class CustomerController {
 	}
 
 	@ResponseStatus(CREATED)
-	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping
 	public Long create(CustomerDTO costumerDTO) {
 		return service.create(costumerDTO);
 	}
 
 	@ResponseStatus(OK)
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping
 	public List<Customer> findAll() {
 		return service.findAll();
 	}
 
 	@ResponseStatus(OK)
-	@GetMapping(value = "/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "/{cpf}")
 	public Customer findByCpf(String cpf) {
 		return service.findByCpf(cpf);
 	}
 
 	@ResponseStatus(OK)
-	@PutMapping(value = "/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PutMapping(value = "/{cpf}")
 	public void update(CustomerDTO costumerDTO) {
 		service.update(costumerDTO);
 	}
 
 	@ResponseStatus(NO_CONTENT)
-	@DeleteMapping(value = "/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/{cpf}")
 	public void delete(String cpf) {
 		service.delete(cpf);
 	}
