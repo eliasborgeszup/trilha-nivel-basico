@@ -5,10 +5,10 @@ import java.sql.Date;
 import lombok.Getter;
 
 @Getter
-public class ClienteDTO {
+public class CustomerDTO {
 	private String nome;
-	private Date dataNascimento;
+	private Date birthDate;
 	private String email;
-	private String telefone;
-	private String endereco;
+	private String phone;
+	private String adress;
 }
