@@ -9,12 +9,12 @@ import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
 	@Override
-	public void created(CustomerDTO costumerDTO) {
+	public Long create(CustomerDTO costumerDTO) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
@@ -30,9 +30,14 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public void delete(String cpf) {
+	public Long update(CustomerDTO costumerDTO) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
+	@Override
+	public void delete(String cpf) {
+		// TODO Auto-generated method stub
+
+	}
 }

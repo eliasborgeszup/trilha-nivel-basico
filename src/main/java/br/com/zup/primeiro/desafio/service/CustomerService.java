@@ -6,11 +6,13 @@ import br.com.zup.primeiro.desafio.dto.CustomerDTO;
 import br.com.zup.primeiro.desafio.entity.Customer;
 
 public interface CustomerService {
-	public void created(CustomerDTO costumerDTO);
-	
+	public Long create(CustomerDTO costumerDTO);
+
 	public List<Customer> findAll();
-	
+
 	public Customer findByCpf(String cpf);
-	
+
+	public Long update(CustomerDTO costumerDTO);
+
 	public void delete(String cpf);
 }
