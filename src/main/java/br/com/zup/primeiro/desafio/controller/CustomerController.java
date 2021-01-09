@@ -1,6 +1,7 @@
 package br.com.zup.primeiro.desafio.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.primeiro.desafio.dto.CustomerDTO;
 import br.com.zup.primeiro.desafio.entity.Customer;
+import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 
 @RestController
@@ -33,7 +35,7 @@ public class CustomerController {
 
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public Long create(@Valid @RequestBody CustomerDTO costumerDTO) {
+	public UUID create(@Valid @RequestBody CustomerDTO costumerDTO) throws GenericException {
 		return service.create(costumerDTO);
 	}
 
@@ -51,7 +53,7 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public Long update(@Valid @RequestBody CustomerDTO costumerDTO) {
+	public UUID update(@Valid @RequestBody CustomerDTO costumerDTO) {
 		return service.update(costumerDTO);
 	}
 
