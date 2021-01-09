@@ -43,13 +43,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<Customer> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Customer>)repository.findAll();
 	}
 
 	@Override
 	public Customer findByCpf(String cpf) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

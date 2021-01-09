@@ -8,4 +8,6 @@ import br.com.zup.primeiro.desafio.entity.Customer;
 @Repository
 public interface CustomerRepository extends CrudRepository<Customer, Long>{
 	boolean existsByCpf(String cpf);
+	
+	Customer findByCpf(String cpf);
 }
