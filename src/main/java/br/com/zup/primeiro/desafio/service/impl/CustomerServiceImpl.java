@@ -15,6 +15,8 @@ import br.com.zup.primeiro.desafio.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+	private static final String CPF_NÃO_ENCONTRADO = "CPF não encontrado";
+
 	private static final String CPF_JÁ_CADASTRADO = "CPF já cadastrado!";
 
 	CustomerRepository repository;
@@ -41,14 +43,13 @@ public class CustomerServiceImpl implements CustomerService {
 		return customer.getId();
 	}
 
-	@Override
 	public List<Customer> findAll() {
-		return (List<Customer>)repository.findAll();
+		return (List<Customer>) repository.findAll();
 	}
 
 	@Override
-	public Customer findByCpf(String cpf) {
-		return null;
+	public Customer findByCpf(String cpf) throws GenericException {
+		return repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NÃO_ENCONTRADO));
 	}
 
 	@Override

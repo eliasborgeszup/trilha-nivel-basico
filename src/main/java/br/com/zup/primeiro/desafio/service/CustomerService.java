@@ -12,7 +12,7 @@ public interface CustomerService {
 
 	public List<Customer> findAll();
 
-	public Customer findByCpf(String cpf);
+	public Customer findByCpf(String cpf) throws GenericException;
 
 	public UUID update(CustomerDTO costumerDTO);
 

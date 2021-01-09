@@ -47,7 +47,7 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@GetMapping(value = "/{cpf}")
-	public Customer findByCpf(@PathVariable String cpf) {
+	public Customer findByCpf(@PathVariable String cpf) throws GenericException {
 		return service.findByCpf(cpf);
 	}
 
