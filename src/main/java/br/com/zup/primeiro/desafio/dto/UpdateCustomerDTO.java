@@ -8,20 +8,15 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 import lombok.Getter;
 
 @Getter
-public class CustomerDTO {
+public class UpdateCustomerDTO {
 	@NotBlank(message = "{validation.blank}")
 	private String name;
 
 	@Past(message = "{validation.invalid.date}")
 	private LocalDate birthDate;
-
-	@CPF(message = "{validation.invalid.cpf}")
-	private String cpf;
 
 	@Email(message = "{validation.invalid.email}")
 	@NotBlank(message = "{validation.blank}")
@@ -32,5 +27,5 @@ public class CustomerDTO {
 	private String phone;
 
 	@NotBlank(message = "{validation.blank}")
-	private String adress;
+	private String address;
 }

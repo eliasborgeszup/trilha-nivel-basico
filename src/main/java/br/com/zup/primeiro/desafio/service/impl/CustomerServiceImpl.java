@@ -1,13 +1,11 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import br.com.zup.primeiro.desafio.dto.CustomerDTO;
+import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
+import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
@@ -16,9 +14,8 @@ import br.com.zup.primeiro.desafio.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-	private static final String CPF_NÃO_ENCONTRADO = "CPF não encontrado!";
-
-	private static final String CPF_JÁ_CADASTRADO = "CPF já cadastrado!";
+	private static final String CPF_NOT_FOUND = "CPF não encontrado!";
+	private static final String CPF_REGISTERED = "CPF já cadastrado!";
 
 	CustomerRepository repository;
 
@@ -26,12 +23,12 @@ public class CustomerServiceImpl implements CustomerService {
 		this.repository = repository;
 	}
 
-	public UUID create(CustomerDTO customerDTO) throws GenericException {
-		if (checkExistByCPF(customerDTO.getCpf())) {
-			throw new GenericException(CPF_JÁ_CADASTRADO);
+	public String create(CreateCustomerDTO createCustomerDTO) throws GenericException {
+		if(repository.existsByCpf(createCustomerDTO.getCpf())) {
+			throw new GenericException(CPF_REGISTERED);
 		}
-
-		return repository.save(convertDtoToEntity(customerDTO)).getId();
+		
+		return new Customer().create(createCustomerDTO, repository);
 	}
 
 	public List<Customer> findAll() {
@@ -39,41 +36,26 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public Customer findByCpf(String cpf) throws GenericException {
-		return repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NÃO_ENCONTRADO));
+		return repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
 	}
 
-	public String update(String cpf, CustomerDTO customerDTO) throws GenericException {
-		Optional<Customer> customerConsulted = repository.findByCpf(cpf);
-		
-		if(customerConsulted.isEmpty()) {
-			throw new GenericException(CPF_NÃO_ENCONTRADO);
-		}
+	public String update(String cpf, UpdateCustomerDTO updateCustomerDTO) throws GenericException {
+		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
 
-		Customer customer = convertDtoToEntity(customerDTO);
-
-		customer.setId(customerConsulted.get().getId());
-		customer.setCpf(cpf);
-
-		return repository.save(customer).getId().toString();
+		return customer.update(updateCustomerDTO, repository);
 	}
 
+	@Override
 	public void delete(String cpf) throws GenericException {
-		if (!checkExistByCPF(cpf)) {
-			throw new GenericException(CPF_NÃO_ENCONTRADO);
-		}
-
-		repository.deleteCustomerByCpf(cpf);
+		// TODO Auto-generated method stub
+		
 	}
 
-	public boolean checkExistByCPF(String cpf) {
-		return repository.existsByCpf(cpf);
-	}
+	/*
+	 * public void delete(String cpf) throws GenericException { if
+	 * (!checkExistByCPF(cpf)) { throw new GenericException(CPF_NOT_FOUND); }
+	 * 
+	 * repository.deleteCustomerByCpf(cpf); }
+	 */
 
-	public Customer convertDtoToEntity(CustomerDTO customerDTO) {
-		Customer customer = new Customer();
-
-		BeanUtils.copyProperties(customerDTO, customer);
-
-		return customer;
-	}
 }

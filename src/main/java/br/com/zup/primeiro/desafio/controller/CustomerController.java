@@ -1,7 +1,6 @@
 package br.com.zup.primeiro.desafio.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -18,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zup.primeiro.desafio.dto.CustomerDTO;
+import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
+import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
@@ -35,8 +35,8 @@ public class CustomerController {
 
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public UUID create(@Valid @RequestBody CustomerDTO costumerDTO) throws GenericException {
-		return service.create(costumerDTO);
+	public String create(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) throws GenericException {
+		return service.create(createCustomerDTO);
 	}
 
 	@ResponseStatus(OK)
@@ -53,8 +53,8 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public String update(@PathVariable String cpf, @Valid @RequestBody CustomerDTO costumerDTO) throws GenericException {
-		return service.update(cpf, costumerDTO);
+	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO) throws GenericException {
+		return service.update(cpf, updateCustomerDTO);
 	}
 
 	@ResponseStatus(NO_CONTENT)
