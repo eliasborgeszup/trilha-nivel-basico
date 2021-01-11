@@ -36,7 +36,7 @@ public class Customer {
 
 	@Column(nullable = false)
 	private String address;
-	
+
 	public String create(CreateCustomerDTO createCustomerDTO, CustomerRepository repository) {
 		this.id = UUID.randomUUID().toString();
 		this.name = createCustomerDTO.getName();
@@ -45,20 +45,20 @@ public class Customer {
 		this.email = createCustomerDTO.getEmail();
 		this.phone = createCustomerDTO.getPhone();
 		this.address = createCustomerDTO.getAddress();
-		
+
 		return repository.save(this).id;
 	}
-	
-	public String update(UpdateCustomerDTO customerDTO, CustomerRepository repository) {
-		this.name = customerDTO.getName();
-		this.birthDate = customerDTO.getBirthDate();
-		this.email = customerDTO.getEmail();
-		this.phone = customerDTO.getPhone();
-		this.address = customerDTO.getAddress();
-		
+
+	public String update(UpdateCustomerDTO updateCustomerDTO, CustomerRepository repository) {
+		this.name = updateCustomerDTO.getName();
+		this.birthDate = updateCustomerDTO.getBirthDate();
+		this.email = updateCustomerDTO.getEmail();
+		this.phone = updateCustomerDTO.getPhone();
+		this.address = updateCustomerDTO.getAddress();
+
 		return repository.save(this).id;
 	}
-	
+
 	public void delete(Customer customer, CustomerRepository repository) {
 		repository.delete(customer);
 	}

@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public void delete(String cpf) throws GenericException {
 		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
-		
+
 		customer.delete(customer, repository);
 	}
 
