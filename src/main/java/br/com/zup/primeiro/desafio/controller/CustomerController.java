@@ -24,7 +24,7 @@ import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 
 @RestController
-@RequestMapping(value = "/costumers")
+@RequestMapping(value = "/customers")
 public class CustomerController {
 
 	CustomerService service;
@@ -53,13 +53,13 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public UUID update(@Valid @RequestBody CustomerDTO costumerDTO) {
-		return service.update(costumerDTO);
+	public String update(@PathVariable String cpf, @Valid @RequestBody CustomerDTO costumerDTO) throws GenericException {
+		return service.update(cpf, costumerDTO);
 	}
 
 	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping(value = "/{cpf}")
-	public void delete(String cpf) {
+	public void delete(@PathVariable String cpf) throws GenericException {
 		service.delete(cpf);
 	}
 

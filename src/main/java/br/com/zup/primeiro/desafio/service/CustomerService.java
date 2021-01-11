@@ -8,13 +8,13 @@ import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 
 public interface CustomerService {
-	public UUID create(CustomerDTO costumerDTO) throws GenericException;
+	public UUID create(CustomerDTO customerDTO) throws GenericException;
 
 	public List<Customer> findAll();
 
 	public Customer findByCpf(String cpf) throws GenericException;
 
-	public UUID update(CustomerDTO costumerDTO);
+	public String update(String cpf, CustomerDTO customerDTO) throws GenericException;
 
-	public void delete(String cpf);
+	public void delete(String cpf) throws GenericException;
 }
