@@ -53,7 +53,8 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO) throws GenericException {
+	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO)
+			throws GenericException {
 		return service.update(cpf, updateCustomerDTO);
 	}
 

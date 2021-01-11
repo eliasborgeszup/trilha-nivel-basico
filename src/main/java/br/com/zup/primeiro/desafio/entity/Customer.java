@@ -6,16 +6,14 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
 import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import lombok.Getter;
 
-@Getter
 @Entity
-@Table(name = "Customer")
+@Getter
 public class Customer {
 	@Id
 	@Column(updatable = false, unique = true, nullable = false)
@@ -48,7 +46,7 @@ public class Customer {
 		this.phone = createCustomerDTO.getPhone();
 		this.address = createCustomerDTO.getAddress();
 		
-		return repository.save(this).getId();
+		return repository.save(this).id;
 	}
 	
 	public String update(UpdateCustomerDTO customerDTO, CustomerRepository repository) {
@@ -58,6 +56,10 @@ public class Customer {
 		this.phone = customerDTO.getPhone();
 		this.address = customerDTO.getAddress();
 		
-		return repository.save(this).getId();
+		return repository.save(this).id;
+	}
+	
+	public void delete(Customer customer, CustomerRepository repository) {
+		repository.delete(customer);
 	}
 }

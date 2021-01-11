@@ -24,10 +24,10 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public String create(CreateCustomerDTO createCustomerDTO) throws GenericException {
-		if(repository.existsByCpf(createCustomerDTO.getCpf())) {
+		if (repository.existsByCpf(createCustomerDTO.getCpf())) {
 			throw new GenericException(CPF_REGISTERED);
 		}
-		
+
 		return new Customer().create(createCustomerDTO, repository);
 	}
 
@@ -45,17 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
 		return customer.update(updateCustomerDTO, repository);
 	}
 
-	@Override
 	public void delete(String cpf) throws GenericException {
-		// TODO Auto-generated method stub
+		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
 		
+		customer.delete(customer, repository);
 	}
-
-	/*
-	 * public void delete(String cpf) throws GenericException { if
-	 * (!checkExistByCPF(cpf)) { throw new GenericException(CPF_NOT_FOUND); }
-	 * 
-	 * repository.deleteCustomerByCpf(cpf); }
-	 */
 
 }
