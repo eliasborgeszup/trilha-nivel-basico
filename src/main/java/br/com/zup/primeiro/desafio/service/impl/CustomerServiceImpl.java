@@ -11,12 +11,11 @@ import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 
+import static br.com.zup.primeiro.desafio.constant.Constant.CPF_REGISTERED;
+import static br.com.zup.primeiro.desafio.constant.Constant.CPF_NOT_FOUND;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
-
-	private static final String CPF_NOT_FOUND = "CPF não encontrado!";
-	private static final String CPF_REGISTERED = "CPF já cadastrado!";
-
 	CustomerRepository repository;
 
 	public CustomerServiceImpl(CustomerRepository repository) {
