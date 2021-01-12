@@ -1,4 +1,4 @@
-package br.com.zup.primeiro.desafio.dto;
+package br.com.zup.primeiro.desafio.controller.request.customer;
 
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import lombok.Getter;
 
 @Getter
-public class CreateCustomerDTO {
+public class CreateCustomerRequest {
 	@NotBlank(message = "{validation.blank}")
 	private String name;
 

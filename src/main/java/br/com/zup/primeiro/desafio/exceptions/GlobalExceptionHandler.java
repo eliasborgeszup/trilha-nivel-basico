@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import static java.util.Objects.nonNull;
 
-import br.com.zup.primeiro.desafio.dto.ErrorDTO;
-import br.com.zup.primeiro.desafio.dto.ResponseDTO;
+import br.com.zup.primeiro.desafio.controller.request.commons.ErrorRequest;
+import br.com.zup.primeiro.desafio.controller.request.commons.ResponseRequest;
+
+import static java.util.Objects.nonNull;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,9 +25,9 @@ public class GlobalExceptionHandler {
 
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public @ResponseBody List<ErrorDTO> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+	public @ResponseBody List<ErrorRequest> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-		List<ErrorDTO> validationErrors = new ArrayList<>();
+		List<ErrorRequest> validationErrors = new ArrayList<>();
 
 		for (ObjectError error : e.getBindingResult().getAllErrors()) {
 
@@ -40,7 +41,7 @@ public class GlobalExceptionHandler {
 				messageDisplayed.append("] - ");
 				messageDisplayed.append(error.getDefaultMessage());
 
-				validationErrors.add(new ErrorDTO(messageDisplayed.toString()));
+				validationErrors.add(new ErrorRequest(messageDisplayed.toString()));
 			}
 		}
 
@@ -49,7 +50,7 @@ public class GlobalExceptionHandler {
 
 	@ResponseStatus(UNPROCESSABLE_ENTITY)
 	@ExceptionHandler({ GenericException.class })
-	public @ResponseBody ResponseDTO handlerBusinessRules(GenericException e) {
-		return new ResponseDTO(e.getMessage());
+	public @ResponseBody ResponseRequest handlerBusinessRules(GenericException e) {
+		return new ResponseRequest(e.getMessage());
 	}
 }

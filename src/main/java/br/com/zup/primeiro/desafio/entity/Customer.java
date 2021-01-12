@@ -7,8 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
-import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
+import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import lombok.Getter;
 
@@ -37,24 +37,24 @@ public class Customer {
 	@Column(nullable = false)
 	private String address;
 
-	public String create(CreateCustomerDTO createCustomerDTO, CustomerRepository repository) {
+	public String create(CreateCustomerRequest request, CustomerRepository repository) {
 		this.id = UUID.randomUUID().toString();
-		this.name = createCustomerDTO.getName();
-		this.birthDate = createCustomerDTO.getBirthDate();
-		this.cpf = createCustomerDTO.getCpf();
-		this.email = createCustomerDTO.getEmail();
-		this.phone = createCustomerDTO.getPhone();
-		this.address = createCustomerDTO.getAddress();
+		this.name = request.getName();
+		this.birthDate = request.getBirthDate();
+		this.cpf = request.getCpf();
+		this.email = request.getEmail();
+		this.phone = request.getPhone();
+		this.address = request.getAddress();
 
 		return repository.save(this).id;
 	}
 
-	public String update(UpdateCustomerDTO updateCustomerDTO, CustomerRepository repository) {
-		this.name = updateCustomerDTO.getName();
-		this.birthDate = updateCustomerDTO.getBirthDate();
-		this.email = updateCustomerDTO.getEmail();
-		this.phone = updateCustomerDTO.getPhone();
-		this.address = updateCustomerDTO.getAddress();
+	public String update(UpdateCustomerRequest request, CustomerRepository repository) {
+		this.name = request.getName();
+		this.birthDate = request.getBirthDate();
+		this.email = request.getEmail();
+		this.phone = request.getPhone();
+		this.address = request.getAddress();
 
 		return repository.save(this).id;
 	}

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
-import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
+import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
@@ -23,12 +23,12 @@ public class CustomerServiceImpl implements CustomerService {
 		this.repository = repository;
 	}
 
-	public String create(CreateCustomerDTO createCustomerDTO) throws GenericException {
-		if (repository.existsByCpf(createCustomerDTO.getCpf())) {
+	public String create(CreateCustomerRequest request) throws GenericException {
+		if (repository.existsByCpf(request.getCpf())) {
 			throw new GenericException(CPF_REGISTERED);
 		}
 
-		return new Customer().create(createCustomerDTO, repository);
+		return new Customer().create(request, repository);
 	}
 
 	public List<Customer> findAll() {
@@ -39,10 +39,10 @@ public class CustomerServiceImpl implements CustomerService {
 		return repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
 	}
 
-	public String update(String cpf, UpdateCustomerDTO updateCustomerDTO) throws GenericException {
+	public String update(String cpf, UpdateCustomerRequest request) throws GenericException {
 		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
 
-		return customer.update(updateCustomerDTO, repository);
+		return customer.update(request, repository);
 	}
 
 	public void delete(String cpf) throws GenericException {

@@ -1,4 +1,4 @@
-package br.com.zup.primeiro.desafio.dto;
+package br.com.zup.primeiro.desafio.controller.request.customer;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class UpdateCustomerDTO {
+public class UpdateCustomerRequest {
 	@NotBlank(message = "{validation.blank}")
 	private String name;
 

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zup.primeiro.desafio.dto.CreateCustomerDTO;
-import br.com.zup.primeiro.desafio.dto.UpdateCustomerDTO;
+import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
@@ -35,8 +35,8 @@ public class CustomerController {
 
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public String create(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) throws GenericException {
-		return service.create(createCustomerDTO);
+	public String create(@Valid @RequestBody CreateCustomerRequest request) throws GenericException {
+		return service.create(request);
 	}
 
 	@ResponseStatus(OK)
@@ -53,9 +53,9 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerDTO updateCustomerDTO)
+	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request)
 			throws GenericException {
-		return service.update(cpf, updateCustomerDTO);
+		return service.update(cpf, request);
 	}
 
 	@ResponseStatus(NO_CONTENT)
