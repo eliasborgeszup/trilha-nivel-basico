@@ -6,6 +6,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import static java.util.Objects.nonNull;
 
@@ -63,4 +64,15 @@ public class GlobalExceptionHandler {
 		// message: "O documento informado já existe"
 		return new ResponseResponse(exception.getMessage());
 	}
+
+	@ResponseStatus(INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(RuntimeException.class)
+	public @ResponseBody ErrorResponse runtimeExceptionError(RuntimeException e) {
+		StringBuilder mensagemASerExibida = new StringBuilder();
+		//TODO: Armazenar mensagens no validation
+		mensagemASerExibida.append("Erro interno no servidor, contate o administrador do sistema.");
+
+		return new ErrorResponse(mensagemASerExibida.toString());
+	}
+
 }
