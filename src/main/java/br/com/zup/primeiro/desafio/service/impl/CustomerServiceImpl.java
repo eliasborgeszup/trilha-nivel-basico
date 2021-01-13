@@ -14,10 +14,6 @@ import br.com.zup.primeiro.desafio.service.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-
-	private static final String CPF_NOT_FOUND = "CPF não encontrado!";
-	private static final String CPF_REGISTERED = "CPF já cadastrado!";
-
 	private CustomerRepository repository;
 
 	private CustomerServiceImpl(CustomerRepository repository) {
@@ -26,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public String create(CreateCustomerRequest request) {
 		if (repository.existsByCpf(request.getCpf())) {
-			throw new DocumentAlreadyExistsException(CPF_REGISTERED);
+			throw new DocumentAlreadyExistsException("m: created" + "cpf:" + request.getCpf());
 		}
 
 		return new Customer().create(request, repository);
@@ -37,17 +33,19 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public Customer findByCpf(String cpf) {
-		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException(CPF_NOT_FOUND));
+		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
 	}
 
 	public String update(String cpf, UpdateCustomerRequest request) {
-		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException(CPF_NOT_FOUND));
+		Customer customer = repository.findByCpf(cpf)
+				.orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
 
 		return customer.update(request, repository);
 	}
 
 	public void delete(String cpf) {
-		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException(CPF_NOT_FOUND));
+		Customer customer = repository.findByCpf(cpf)
+				.orElseThrow(() -> new NotFoundException("m: delete" + "cpf:" + cpf));
 
 		customer.delete(customer, repository);
 	}

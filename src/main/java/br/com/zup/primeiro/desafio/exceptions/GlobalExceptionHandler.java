@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import br.com.zup.primeiro.desafio.controller.request.commons.ErrorRequest;
-import br.com.zup.primeiro.desafio.controller.request.commons.ResponseRequest;
+import br.com.zup.primeiro.desafio.controller.response.commons.ErrorResponse;
+import br.com.zup.primeiro.desafio.controller.response.commons.ResponseResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,9 +26,9 @@ public class GlobalExceptionHandler {
 
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public @ResponseBody List<ErrorRequest> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+	public @ResponseBody List<ErrorResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-		List<ErrorRequest> validationErrors = new ArrayList<>();
+		List<ErrorResponse> validationErrors = new ArrayList<>();
 
 		for (ObjectError error : e.getBindingResult().getAllErrors()) {
 
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 				messageDisplayed.append("] - ");
 				messageDisplayed.append(error.getDefaultMessage());
 
-				validationErrors.add(new ErrorRequest(messageDisplayed.toString()));
+				validationErrors.add(new ErrorResponse(messageDisplayed.toString()));
 			}
 		}
 
@@ -51,13 +51,16 @@ public class GlobalExceptionHandler {
 
 	@ResponseStatus(NOT_FOUND)
 	@ExceptionHandler({ NotFoundException.class })
-	public @ResponseBody ResponseRequest handlerBusinessRules(NotFoundException exception) {
-		return new ResponseRequest(exception.getMessage());
+	public @ResponseBody ResponseResponse handlerBusinessRules(NotFoundException exception) {
+		// TODO: Armazenar resposta no log e não retornar mensagem
+		return new ResponseResponse(exception.getMessage());
 	}
 
 	@ResponseStatus(UNPROCESSABLE_ENTITY)
 	@ExceptionHandler({ DocumentAlreadyExistsException.class })
-	public @ResponseBody ResponseRequest handlerBusinessRules(DocumentAlreadyExistsException exception) {
-		return new ResponseRequest(exception.getMessage());
+	public @ResponseBody ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
+		// TODO: Armazenar resposta no log e retornar uma mensagem padrao exemplo:
+		// message: "O documento informado já existe"
+		return new ResponseResponse(exception.getMessage());
 	}
 }

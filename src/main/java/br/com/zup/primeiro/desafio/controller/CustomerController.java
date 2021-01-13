@@ -25,7 +25,6 @@ import br.com.zup.primeiro.desafio.service.CustomerService;
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
-
 	private CustomerService service;
 
 	private CustomerController(CustomerService service) {
