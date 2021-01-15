@@ -22,15 +22,13 @@ import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerReq
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.service.CustomerService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
 	private CustomerService service;
-
-	private CustomerController(CustomerService service) {
-		this.service = service;
-	}
 
 	@ResponseStatus(CREATED)
 	@PostMapping

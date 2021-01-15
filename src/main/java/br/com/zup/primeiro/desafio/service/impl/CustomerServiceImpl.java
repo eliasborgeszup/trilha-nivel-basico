@@ -11,14 +11,12 @@ import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import br.com.zup.primeiro.desafio.service.CustomerService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository repository;
-
-	private CustomerServiceImpl(CustomerRepository repository) {
-		this.repository = repository;
-	}
 
 	public String create(CreateCustomerRequest request) {
 		if (repository.existsByCpf(request.getCpf())) {

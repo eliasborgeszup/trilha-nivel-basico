@@ -9,16 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.primeiro.desafio.controller.response.marvel.MarvelResponse;
 import br.com.zup.primeiro.desafio.service.MarvelComicsService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/marvel")
 public class MarvelController {
 
-	MarvelComicsService service;
-
-	public MarvelController(MarvelComicsService service) {
-		this.service = service;
-	}
+	private MarvelComicsService service;
 
 	@ResponseStatus(OK)
 	@GetMapping(value = "/comics")
