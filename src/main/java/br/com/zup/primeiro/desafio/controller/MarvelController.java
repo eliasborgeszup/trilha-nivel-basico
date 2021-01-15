@@ -12,7 +12,7 @@ import br.com.zup.primeiro.desafio.service.MarvelComicsService;
 
 @RestController
 @RequestMapping(value = "/marvel")
-public class MarvelController implements MarvelComicsService{
+public class MarvelController {
 
 	MarvelComicsService service;
 
