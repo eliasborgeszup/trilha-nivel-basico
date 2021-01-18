@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(value = "/customers")
 public class CustomerController {
 	private CustomerService service;
-
+  
 	@ResponseStatus(CREATED)
 	@PostMapping
 	public String create(@Valid @RequestBody CreateCustomerRequest request) {
