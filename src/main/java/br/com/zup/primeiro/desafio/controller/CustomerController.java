@@ -22,16 +22,14 @@ import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerReq
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
 
-	CustomerService service;
-
-	public CustomerController(CustomerService service) {
-		this.service = service;
-	}
+	private CustomerService service;
 
 	@ResponseStatus(CREATED)
 	@PostMapping
