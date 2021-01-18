@@ -7,24 +7,20 @@ import org.springframework.stereotype.Service;
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
-import br.com.zup.primeiro.desafio.exceptions.GenericException;
+import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
+import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import br.com.zup.primeiro.desafio.service.CustomerService;
+import lombok.AllArgsConstructor;
 
-import static br.com.zup.primeiro.desafio.constant.Constant.CPF_REGISTERED;
-import static br.com.zup.primeiro.desafio.constant.Constant.CPF_NOT_FOUND;
-
+@AllArgsConstructor
 @Service
 public class CustomerServiceImpl implements CustomerService {
-	CustomerRepository repository;
+	private CustomerRepository repository;
 
-	public CustomerServiceImpl(CustomerRepository repository) {
-		this.repository = repository;
-	}
-
-	public String create(CreateCustomerRequest request) throws GenericException {
+	public String create(CreateCustomerRequest request) {
 		if (repository.existsByCpf(request.getCpf())) {
-			throw new GenericException(CPF_REGISTERED);
+			throw new DocumentAlreadyExistsException("m: created" + "cpf:" + request.getCpf());
 		}
 
 		return new Customer().create(request, repository);
@@ -34,18 +30,20 @@ public class CustomerServiceImpl implements CustomerService {
 		return (List<Customer>) repository.findAll();
 	}
 
-	public Customer findByCpf(String cpf) throws GenericException {
-		return repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
+	public Customer findByCpf(String cpf) {
+		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
 	}
 
-	public String update(String cpf, UpdateCustomerRequest request) throws GenericException {
-		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
+	public String update(String cpf, UpdateCustomerRequest request) {
+		Customer customer = repository.findByCpf(cpf)
+				.orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
 
 		return customer.update(request, repository);
 	}
 
-	public void delete(String cpf) throws GenericException {
-		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> new GenericException(CPF_NOT_FOUND));
+	public void delete(String cpf) {
+		Customer customer = repository.findByCpf(cpf)
+				.orElseThrow(() -> new NotFoundException("m: delete" + "cpf:" + cpf));
 
 		customer.delete(customer, repository);
 	}

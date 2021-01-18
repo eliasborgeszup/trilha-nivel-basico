@@ -3,6 +3,7 @@ package br.com.zup.primeiro.desafio.service.impl;
 import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
 import org.springframework.stereotype.Service;
 
 import br.com.zup.primeiro.desafio.client.MarvelClient;

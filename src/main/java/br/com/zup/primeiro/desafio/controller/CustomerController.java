@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
-import br.com.zup.primeiro.desafio.exceptions.GenericException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 import lombok.AllArgsConstructor;
 
@@ -28,12 +28,11 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
-
 	private CustomerService service;
-
+  
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public String create(@Valid @RequestBody CreateCustomerRequest request) throws GenericException {
+	public String create(@Valid @RequestBody CreateCustomerRequest request) {
 		return service.create(request);
 	}
 
@@ -45,20 +44,19 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@GetMapping(value = "/{cpf}")
-	public Customer findByCpf(@PathVariable String cpf) throws GenericException {
+	public Customer findByCpf(@PathVariable String cpf) {
 		return service.findByCpf(cpf);
 	}
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request)
-			throws GenericException {
+	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request) {
 		return service.update(cpf, request);
 	}
 
 	@ResponseStatus(NO_CONTENT)
 	@DeleteMapping(value = "/{cpf}")
-	public void delete(@PathVariable String cpf) throws GenericException {
+	public void delete(@PathVariable String cpf) {
 		service.delete(cpf);
 	}
 
