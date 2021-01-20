@@ -53,39 +53,49 @@ public class CustomerServiceImplTest {
 		try {
 			service.create(createCustomerRequestObject());
 		} catch (DocumentAlreadyExistsException e) {
-			assertEquals("m: created" + "cpf:",  e.getMessage());
+			assertEquals("m: created" + "cpf:", e.getMessage());
 		}
 
 	}
-	
+
 	@Test
 	public void updateSuccess() {
 		Customer customer = customerObject();
-		
+
 		Optional<Customer> customerOptional = Optional.of(customer);
-		
+
 		UpdateCustomerRequest request = createUpdateCustomerRequestObject();
-		
-		String cpf = "59522283053";
-		
-		when(repository.findByCpf(cpf)).thenReturn(customerOptional);
+
+		when(repository.findByCpf(customer.getCpf())).thenReturn(customerOptional);
 
 		when(repository.save(any())).thenReturn(customer);
 
-		String messageReceived = service.update(cpf, request);
+		String messageReceived = service.update(customer.getCpf(), request);
 		String expectedMessage = customer.getId();
 
 		assertEquals(expectedMessage, messageReceived);
 	}
 
+	@Test
+	public void findByCpfSucess() {
+		Customer customer = customerObject();
+
+		Optional<Customer> customerOptional = Optional.of(customer);
+
+		when(repository.findByCpf(customer.getCpf())).thenReturn(customerOptional);
+
+		service.findByCpf(customer.getCpf());
+	}
+
 	public CreateCustomerRequest createCustomerRequestObject() {
-		return new CreateCustomerRequest("Elias", LocalDate.now(), "59522283053", "eliasborges@zup.com.br", "34992454428", "Rua X");
+		return new CreateCustomerRequest("Elias", LocalDate.now(), "59522283053", "eliasborges@zup.com.br",
+				"34992454428", "Rua X");
 	}
 
 	public UpdateCustomerRequest createUpdateCustomerRequestObject() {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
-	
+
 	public Customer customerObject() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
