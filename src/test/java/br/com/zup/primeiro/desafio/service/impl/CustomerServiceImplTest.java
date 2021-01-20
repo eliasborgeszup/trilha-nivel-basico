@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,11 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,20 +57,35 @@ public class CustomerServiceImplTest {
 		}
 
 	}
+	
+	@Test
+	public void updateSuccess() {
+		Customer customer = customerObject();
+		
+		Optional<Customer> customerOptional = Optional.of(customer);
+		
+		UpdateCustomerRequest request = createUpdateCustomerRequestObject();
+		
+		String cpf = "59522283053";
+		
+		when(repository.findByCpf(cpf)).thenReturn(customerOptional);
 
-	public CreateCustomerRequest createCustomerRequestObject() {
-		CreateCustomerRequest request = new CreateCustomerRequest();
+		when(repository.save(any())).thenReturn(customer);
 
-		request.setName("Elias");
-		request.setBirthDate(LocalDate.now());
-		request.setCpf("59522283053");
-		request.setEmail("eliasborges@zup.com.br");
-		request.setPhone("34992454428");
-		request.setAddress("Rua X");
+		String messageReceived = service.update(cpf, request);
+		String expectedMessage = customer.getId();
 
-		return request;
+		assertEquals(expectedMessage, messageReceived);
 	}
 
+	public CreateCustomerRequest createCustomerRequestObject() {
+		return new CreateCustomerRequest("Elias", LocalDate.now(), "59522283053", "eliasborges@zup.com.br", "34992454428", "Rua X");
+	}
+
+	public UpdateCustomerRequest createUpdateCustomerRequestObject() {
+		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
+	}
+	
 	public Customer customerObject() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");

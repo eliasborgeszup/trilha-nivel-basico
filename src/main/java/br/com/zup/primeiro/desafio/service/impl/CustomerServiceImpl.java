@@ -19,10 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository repository;
 
 	public String create(CreateCustomerRequest request) {
-		if (repository.existsByCpf(request.getCpf())) {
+		if (repository.existsByCpf(request.getCpf()))
 			throw new DocumentAlreadyExistsException("m: created" + "cpf:" + request.getCpf());
-		}
-
+		
 		return new Customer().create(request, repository);
 	}
 
@@ -37,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public String update(String cpf, UpdateCustomerRequest request) {
 		Customer customer = repository.findByCpf(cpf)
 				.orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
-
+		
 		return customer.update(request, repository);
 	}
 
