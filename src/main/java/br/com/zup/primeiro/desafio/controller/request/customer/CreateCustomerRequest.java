@@ -11,8 +11,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class CreateCustomerRequest {
 	@NotBlank(message = "{validation.blank}")
 	private String name;

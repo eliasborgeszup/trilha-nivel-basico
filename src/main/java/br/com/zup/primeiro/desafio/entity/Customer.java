@@ -10,10 +10,14 @@ import javax.persistence.Id;
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 	@Id
 	@Column(updatable = false, unique = true, nullable = false)
