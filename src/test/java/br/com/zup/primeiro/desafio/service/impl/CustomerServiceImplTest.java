@@ -31,54 +31,23 @@ public class CustomerServiceImplTest {
 	private CustomerServiceImpl service;
 
 	@Test
-	public void createdSuccess() {
-		Customer customer = customerObject();
-
+	public void shouldCreateCustomerAndReturnId() {
+		//Given
+		CreateCustomerRequest customerRequest = buildCreateCustomerRequest();
+		Customer customer = buildCustomer();
 		when(repository.save(any())).thenReturn(customer);
-
-		when(service.create(createCustomerRequestObject())).thenReturn(customer.getId());
-
-		assertFalse(repository.existsByCpf(customer.getCpf()));
-
-		String messageReceived = service.create(createCustomerRequestObject());
-		String expectedMessage = customer.getId();
-
-		assertEquals(expectedMessage, messageReceived);
+		
+		//When
+		String id = service.create(customerRequest);
+		
+		//Then
+		assertEquals(id, customer.getId());
+		
 	}
-
-	@Test
-	public void createdUnsuccessfulExistingCPF() {
-		when(repository.existsByCpf(any())).thenThrow(DocumentAlreadyExistsException.class);
-
-		try {
-			service.create(createCustomerRequestObject());
-		} catch (DocumentAlreadyExistsException e) {
-			assertEquals("m: created" + "cpf:", e.getMessage());
-		}
-
-	}
-
-	@Test
-	public void updateSuccess() {
-		Customer customer = customerObject();
-
-		Optional<Customer> customerOptional = Optional.of(customer);
-
-		UpdateCustomerRequest request = createUpdateCustomerRequestObject();
-
-		when(repository.findByCpf(customer.getCpf())).thenReturn(customerOptional);
-
-		when(repository.save(any())).thenReturn(customer);
-
-		String messageReceived = service.update(customer.getCpf(), request);
-		String expectedMessage = customer.getId();
-
-		assertEquals(expectedMessage, messageReceived);
-	}
-
+	
 	@Test
 	public void findByCpfSucess() {
-		Customer customer = customerObject();
+		Customer customer = buildCustomer();
 
 		Optional<Customer> customerOptional = Optional.of(customer);
 
@@ -87,16 +56,16 @@ public class CustomerServiceImplTest {
 		service.findByCpf(customer.getCpf());
 	}
 
-	public CreateCustomerRequest createCustomerRequestObject() {
+	public CreateCustomerRequest buildCreateCustomerRequest() {
 		return new CreateCustomerRequest("Elias", LocalDate.now(), "59522283053", "eliasborges@zup.com.br",
 				"34992454428", "Rua X");
 	}
 
-	public UpdateCustomerRequest createUpdateCustomerRequestObject() {
+	public UpdateCustomerRequest buildCreateUpdateCustomerRequest() {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
-	public Customer customerObject() {
+	public Customer buildCustomer() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
 	}

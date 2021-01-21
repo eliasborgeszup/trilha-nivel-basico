@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/trilha-nivel-basico.iml" filepath="$PROJECT_DIR$/.idea/trilha-nivel-basico.iml" />
+      <module fileurl="file://$PROJECT_DIR$/trilha-nivel-basico.iml" filepath="$PROJECT_DIR$/trilha-nivel-basico.iml" />
     </modules>
   </component>
 </project>

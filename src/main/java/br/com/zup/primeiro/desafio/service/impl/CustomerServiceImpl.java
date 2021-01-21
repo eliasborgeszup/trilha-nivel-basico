@@ -19,9 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository repository;
 
 	public String create(CreateCustomerRequest request) {
-		if (repository.existsByCpf(request.getCpf()))
+		if (repository.existsByCpf(request.getCpf())) {
 			throw new DocumentAlreadyExistsException("m: created" + "cpf:" + request.getCpf());
-		
+		}
 		return new Customer().create(request, repository);
 	}
 
