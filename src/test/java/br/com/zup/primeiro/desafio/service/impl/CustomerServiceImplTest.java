@@ -131,6 +131,15 @@ public class CustomerServiceImplTest {
 		verify(repository).delete(customer);
 	}
 	
+	@Test(expected = NotFoundException.class)
+	public void shouldNotDeleteCustomerWhenCpfNotExists() {
+		// Given
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.empty());
+
+		// When
+		service.delete(buildCPF());
+	}
+	
 	public Customer buildCustomer() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
