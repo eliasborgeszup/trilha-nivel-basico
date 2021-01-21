@@ -1,10 +1,9 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class CustomerServiceImplTest {
 		// Then
 		assertEquals(customers, customersBD);
 	}
-	
+
 	@Test
 	public void findByCpfAndReturnCustomer() {
 		// Given
@@ -100,14 +99,14 @@ public class CustomerServiceImplTest {
 		Customer customer = buildCustomer();
 		when(repository.findByCpf(buildCPF())).thenReturn(Optional.of(customer));
 		when(repository.save(any())).thenReturn(customer);
-		
+
 		// When
 		String id = service.update(buildCPF(), customerRequest);
 
 		// Then
 		assertEquals(id, customer.getId());
 	}
-	
+
 	@Test(expected = NotFoundException.class)
 	public void shouldNotUpdateCustomerWhenCpfNotExists() {
 		// Given
@@ -117,7 +116,7 @@ public class CustomerServiceImplTest {
 		// When
 		service.update(buildCPF(), customerRequest);
 	}
-	
+
 	@Test
 	public void shouldDeleteCustomer() {
 		// Given
@@ -130,7 +129,7 @@ public class CustomerServiceImplTest {
 		// Then
 		verify(repository).delete(customer);
 	}
-	
+
 	@Test(expected = NotFoundException.class)
 	public void shouldNotDeleteCustomerWhenCpfNotExists() {
 		// Given
@@ -139,37 +138,36 @@ public class CustomerServiceImplTest {
 		// When
 		service.delete(buildCPF());
 	}
-	
-	public Customer buildCustomer() {
+
+	private Customer buildCustomer() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
-	public CreateCustomerRequest buildCreateCustomerRequest() {
+	private CreateCustomerRequest buildCreateCustomerRequest() {
 		return new CreateCustomerRequest("Elias", LocalDate.now(), "59522283053", "eliasborges@zup.com.br",
 				"34992454428", "Rua X");
 	}
 
-	public UpdateCustomerRequest buildUpdateCustomerRequest() {
+	private UpdateCustomerRequest buildUpdateCustomerRequest() {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
-	public List<Customer> buildListCustomer(){
+	private List<Customer> buildListCustomer() {
 		List<Customer> customers = new ArrayList<>();
-		
+
 		Customer customerElias = new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
-		
 		Customer customerIsrael = new Customer(UUID.randomUUID().toString(), "Israel", LocalDate.now(), "86202508094",
 				"israel.jesus2@zup.com.br", "34992454428", "Rua X");
-		
+
 		customers.add(customerElias);
 		customers.add(customerIsrael);
-		
+
 		return customers;
 	}
 
-	public String buildCPF() {
+	private String buildCPF() {
 		return "59522283053";
 	}
 }
