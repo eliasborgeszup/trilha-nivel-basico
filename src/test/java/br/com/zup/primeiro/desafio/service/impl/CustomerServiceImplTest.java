@@ -1,8 +1,10 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
 import static org.junit.Assert.assertEquals;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -114,6 +116,19 @@ public class CustomerServiceImplTest {
 
 		// When
 		service.update(buildCPF(), customerRequest);
+	}
+	
+	@Test
+	public void shouldDeleteCustomer() {
+		// Given
+		Customer customer = buildCustomer();
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.of(customer));
+
+		// When
+		service.delete(buildCPF());
+
+		// Then
+		verify(repository).delete(customer);
 	}
 	
 	public Customer buildCustomer() {

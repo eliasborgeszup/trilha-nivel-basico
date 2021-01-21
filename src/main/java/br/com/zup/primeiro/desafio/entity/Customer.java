@@ -11,6 +11,7 @@ import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerReq
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = { "id" })
 public class Customer {
 	@Id
 	@Column(updatable = false, unique = true, nullable = false)
