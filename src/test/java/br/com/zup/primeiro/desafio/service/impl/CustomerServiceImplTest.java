@@ -15,6 +15,7 @@ import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerReq
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
+import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
 import java.time.LocalDate;
@@ -55,16 +56,35 @@ public class CustomerServiceImplTest {
 	}
 
 	@Test
-	public void findByCpfSucess() {
+	public void findByCpfAndReturnCustomer() {
 		// Given
 		Customer customer = buildCustomer();
 		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.of(customer));
-		
+
 		// When
 		Customer customerBD = service.findByCpf(customer.getCpf());
-		
+
 		// Then
 		assertEquals(customer, customerBD);
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void shoulNotFindByCpfWhenCpfNotExists() {
+		// Given
+		Customer customer = buildCustomer();
+		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.empty());
+
+		// When
+		service.findByCpf(customer.getCpf());
+	}
+
+	@Test
+	public void findAllAndReturnListCustomer() {
+	}
+
+	public Customer buildCustomer() {
+		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
+				"eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
 	public CreateCustomerRequest buildCreateCustomerRequest() {
@@ -76,8 +96,4 @@ public class CustomerServiceImplTest {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
-	public Customer buildCustomer() {
-		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
-				"eliasborges@zup.com.br", "34992454428", "Rua X");
-	}
 }
