@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.TOO_EARLY;
 
 import static java.util.Objects.nonNull;
 
@@ -62,6 +63,12 @@ public class GlobalExceptionHandler {
 	public @ResponseBody ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
 		// TODO: Armazenar resposta no log e retornar uma mensagem padrao exemplo:
 		// message: "O documento informado já existe"
+		return new ResponseResponse(exception.getMessage());
+	}
+	
+	@ResponseStatus(TOO_EARLY)
+	@ExceptionHandler({ PaginationSizeLimitExceededException.class })
+	public @ResponseBody ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
 		return new ResponseResponse(exception.getMessage());
 	}
 

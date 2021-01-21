@@ -16,6 +16,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
@@ -60,11 +65,12 @@ public class CustomerServiceImplTest {
 	@Test
 	public void findAllCustomersAndReturnList() {
 		// Given
-		List<Customer> customers = buildListCustomer();
-		when(repository.findAll()).thenReturn(customers);
+		Pageable page = PageRequest.of(0, 10, Sort.by("name").ascending());
+		Page<Customer> customers = new PageImpl<Customer>(buildListCustomer());
+		when(repository.findAll(page)).thenReturn(customers);
 
 		// When
-		List<Customer> customersBD = service.findAll();
+		Page<Customer> customersBD = service.findAll(page);
 
 		// Then
 		assertEquals(customers, customersBD);

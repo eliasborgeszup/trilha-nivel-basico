@@ -1,7 +1,7 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
@@ -25,8 +25,8 @@ public class CustomerServiceImpl implements CustomerService {
 		return new Customer().create(request, repository);
 	}
 
-	public List<Customer> findAll() {
-		return repository.findAll();
+	public Page<Customer> findAll(Pageable page) {
+		return repository.findAll(page);
 	}
 
 	public Customer findByCpf(String cpf) {
@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public String update(String cpf, UpdateCustomerRequest request) {
 		Customer customer = repository.findByCpf(cpf)
 				.orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
-		
+
 		return customer.update(request, repository);
 	}
 
