@@ -32,28 +32,39 @@ public class CustomerServiceImplTest {
 
 	@Test
 	public void shouldCreateCustomerAndReturnId() {
-		//Given
+		// Given
 		CreateCustomerRequest customerRequest = buildCreateCustomerRequest();
 		Customer customer = buildCustomer();
 		when(repository.save(any())).thenReturn(customer);
-		
-		//When
+
+		// When
 		String id = service.create(customerRequest);
-		
-		//Then
+
+		// Then
 		assertEquals(id, customer.getId());
-		
 	}
-	
+
+	@Test(expected = DocumentAlreadyExistsException.class)
+	public void shouldNotCreateCustomerWhenCpfExists() {
+		// Given
+		CreateCustomerRequest customerRequest = buildCreateCustomerRequest();
+		when(repository.existsByCpf(customerRequest.getCpf())).thenReturn(true);
+
+		// When
+		service.create(customerRequest);
+	}
+
 	@Test
 	public void findByCpfSucess() {
+		// Given
 		Customer customer = buildCustomer();
-
-		Optional<Customer> customerOptional = Optional.of(customer);
-
-		when(repository.findByCpf(customer.getCpf())).thenReturn(customerOptional);
-
-		service.findByCpf(customer.getCpf());
+		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.of(customer));
+		
+		// When
+		Customer customerBD = service.findByCpf(customer.getCpf());
+		
+		// Then
+		assertEquals(customer, customerBD);
 	}
 
 	public CreateCustomerRequest buildCreateCustomerRequest() {
