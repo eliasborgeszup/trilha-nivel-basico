@@ -1,9 +1,14 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +22,6 @@ import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
-
-import java.time.LocalDate;
-import java.util.Optional;
-import java.util.UUID;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceImplTest {
@@ -56,6 +57,19 @@ public class CustomerServiceImplTest {
 	}
 
 	@Test
+	public void findAllCustomersAndReturnList() {
+		// Given
+		List<Customer> customers = buildListCustomer();
+		when(repository.findAll()).thenReturn(customers);
+
+		// When
+		List<Customer> customersBD = service.findAll();
+
+		// Then
+		assertEquals(customers, customersBD);
+	}
+	
+	@Test
 	public void findByCpfAndReturnCustomer() {
 		// Given
 		Customer customer = buildCustomer();
@@ -69,17 +83,13 @@ public class CustomerServiceImplTest {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void shoulNotFindByCpfWhenCpfNotExists() {
+	public void shouldNotFindCustomerByCpfWhenNotExists() {
 		// Given
 		Customer customer = buildCustomer();
 		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.empty());
 
 		// When
 		service.findByCpf(customer.getCpf());
-	}
-
-	@Test
-	public void findAllAndReturnListCustomer() {
 	}
 
 	public Customer buildCustomer() {
@@ -96,4 +106,18 @@ public class CustomerServiceImplTest {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
+	public List<Customer> buildListCustomer(){
+		List<Customer> customers = new ArrayList<>();
+		
+		Customer customerElias = new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
+				"eliasborges@zup.com.br", "34992454428", "Rua X");
+		
+		Customer customerIsrael = new Customer(UUID.randomUUID().toString(), "Israel", LocalDate.now(), "86202508094",
+				"israel.jesus2@zup.com.br", "34992454428", "Rua X");
+		
+		customers.add(customerElias);
+		customers.add(customerIsrael);
+		
+		return customers;
+	}
 }

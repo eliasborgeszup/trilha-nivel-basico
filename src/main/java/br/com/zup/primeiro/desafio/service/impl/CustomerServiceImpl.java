@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public List<Customer> findAll() {
-		return (List<Customer>) repository.findAll();
+		return repository.findAll();
 	}
 
 	public Customer findByCpf(String cpf) {
