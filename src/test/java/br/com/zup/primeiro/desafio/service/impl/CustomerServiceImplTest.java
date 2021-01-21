@@ -73,10 +73,10 @@ public class CustomerServiceImplTest {
 	public void findByCpfAndReturnCustomer() {
 		// Given
 		Customer customer = buildCustomer();
-		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.of(customer));
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.of(customer));
 
 		// When
-		Customer customerBD = service.findByCpf(customer.getCpf());
+		Customer customerBD = service.findByCpf(buildCPF());
 
 		// Then
 		assertEquals(customer, customerBD);
@@ -85,13 +85,37 @@ public class CustomerServiceImplTest {
 	@Test(expected = NotFoundException.class)
 	public void shouldNotFindCustomerByCpfWhenNotExists() {
 		// Given
-		Customer customer = buildCustomer();
-		when(repository.findByCpf(customer.getCpf())).thenReturn(Optional.empty());
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.empty());
 
 		// When
-		service.findByCpf(customer.getCpf());
+		service.findByCpf(buildCPF());
 	}
 
+	@Test
+	public void shouldUpdateCustomerAndReturnId() {
+		// Given
+		UpdateCustomerRequest customerRequest = buildUpdateCustomerRequest();
+		Customer customer = buildCustomer();
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.of(customer));
+		when(repository.save(any())).thenReturn(customer);
+		
+		// When
+		String id = service.update(buildCPF(), customerRequest);
+
+		// Then
+		assertEquals(id, customer.getId());
+	}
+	
+	@Test(expected = NotFoundException.class)
+	public void shouldNotUpdateCustomerWhenCpfNotExists() {
+		// Given
+		UpdateCustomerRequest customerRequest = buildUpdateCustomerRequest();
+		when(repository.findByCpf(buildCPF())).thenReturn(Optional.empty());
+
+		// When
+		service.update(buildCPF(), customerRequest);
+	}
+	
 	public Customer buildCustomer() {
 		return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
 				"eliasborges@zup.com.br", "34992454428", "Rua X");
@@ -102,7 +126,7 @@ public class CustomerServiceImplTest {
 				"34992454428", "Rua X");
 	}
 
-	public UpdateCustomerRequest buildCreateUpdateCustomerRequest() {
+	public UpdateCustomerRequest buildUpdateCustomerRequest() {
 		return new UpdateCustomerRequest("Elias", LocalDate.now(), "eliasborges@zup.com.br", "34992454428", "Rua X");
 	}
 
@@ -119,5 +143,9 @@ public class CustomerServiceImplTest {
 		customers.add(customerIsrael);
 		
 		return customers;
+	}
+
+	public String buildCPF() {
+		return "59522283053";
 	}
 }
