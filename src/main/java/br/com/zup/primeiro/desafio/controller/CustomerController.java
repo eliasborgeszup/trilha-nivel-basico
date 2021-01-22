@@ -48,7 +48,7 @@ public class CustomerController {
 	@ResponseStatus(OK)
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> findAll(
-			@PageableDefault(sort = "name", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable page) {
+			@PageableDefault(sort = "name", direction = Sort.Direction.ASC, page = 0, size = 20) Pageable page) {
 
 		if(page.getPageSize() > SIZE_MAX_PAGE) {
 			throw new PaginationSizeLimitExceededException("m: findAll" + "size: " + page.getPageSize());

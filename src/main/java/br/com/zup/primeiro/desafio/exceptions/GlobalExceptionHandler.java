@@ -7,7 +7,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.TOO_EARLY;
 
 import static java.util.Objects.nonNull;
 
@@ -66,7 +65,7 @@ public class GlobalExceptionHandler {
 		return new ResponseResponse(exception.getMessage());
 	}
 	
-	@ResponseStatus(TOO_EARLY)
+	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler({ PaginationSizeLimitExceededException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
 		return new ResponseResponse(exception.getMessage());
