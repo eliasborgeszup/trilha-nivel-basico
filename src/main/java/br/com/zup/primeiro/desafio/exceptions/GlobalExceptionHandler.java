@@ -1,15 +1,17 @@
 package br.com.zup.primeiro.desafio.exceptions;
 
+import static java.util.Objects.nonNull;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-
-import static java.util.Objects.nonNull;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,13 +25,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
+@PropertySource("classpath:messages.properties")
 public class GlobalExceptionHandler {
+
 	public static final int STR_FIELD_NAME = 0;
 	public static final int IGNORE_DOT_POST = 1;
 
+	@Autowired
+	private Environment env;
+
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public @ResponseBody List<ErrorResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+	public @ResponseBody List<ErrorResponse> handlerMethodArgumentNotValidException(
+			MethodArgumentNotValidException exception) {
 
 		List<ErrorResponse> validationErrors = new ArrayList<>();
 
@@ -56,28 +64,28 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler({ NotFoundException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(NotFoundException exception) {
 		log.error(exception.getMessage());
-		return new ResponseResponse("Documento não encontrado.");
+		return new ResponseResponse(env.getProperty("validation.not.found"));
 	}
 
 	@ResponseStatus(UNPROCESSABLE_ENTITY)
 	@ExceptionHandler({ DocumentAlreadyExistsException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
 		log.error(exception.getMessage());
-		return new ResponseResponse("Documento já existente.");
+		return new ResponseResponse(env.getProperty("validation.document.already.exists"));
 	}
-	
+
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler({ PaginationSizeLimitExceededException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
 		log.error(exception.getMessage());
-		return new ResponseResponse("Quantidade de paginas maior que o permitido.");
+		return new ResponseResponse(env.getProperty("validation.pagination.size.limit.exceeded"));
 	}
 
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(RuntimeException.class)
 	public @ResponseBody ErrorResponse runtimeExceptionError(RuntimeException exception) {
 		log.error(exception.getMessage());
-		return new ErrorResponse("Erro interno no servidor, contate o administrador do sistema.");
+		return new ErrorResponse(env.getProperty("validation.internal.error"));
 	}
 
 }
