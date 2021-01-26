@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public String create(CreateCustomerRequest request) {
 		if (repository.existsByCpf(request.getCpf())) {
-			throw new DocumentAlreadyExistsException("m: created" + "cpf:" + request.getCpf());
+			throw new DocumentAlreadyExistsException("service m: created" + "cpf:" + request.getCpf());
 		}
 		return new Customer().create(request, repository);
 	}
@@ -30,19 +30,19 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public Customer findByCpf(String cpf) {
-		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
+		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException("service m: findByCpf cpf: " + cpf));
 	}
 
 	public String update(String cpf, UpdateCustomerRequest request) {
 		Customer customer = repository.findByCpf(cpf)
-				.orElseThrow(() -> new NotFoundException("m: findByCpf" + "cpf:" + cpf));
+				.orElseThrow(() -> new NotFoundException("service m: findByCpf" + "cpf:" + cpf));
 
 		return customer.update(request, repository);
 	}
 
 	public void delete(String cpf) {
 		Customer customer = repository.findByCpf(cpf)
-				.orElseThrow(() -> new NotFoundException("m: delete" + "cpf:" + cpf));
+				.orElseThrow(() -> new NotFoundException("service m: delete" + "cpf:" + cpf));
 
 		customer.delete(customer, repository);
 	}

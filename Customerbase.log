@@ -1,0 +1,40 @@
+2021-01-26 09:24:49,838 [background-preinit] INFO  o.h.v.i.u.Version                                  - HV000001: Hibernate Validator 6.1.6.Final
+2021-01-26 09:24:49,939 [restartedMain] INFO  b.c.z.p.d.TrilhaNivelBasicoApplication             - Starting TrilhaNivelBasicoApplication using Java 14.0.2 on ZUP-449 with PID 11912 (C:\repo\trilha-nivel-basico\target\classes started by Zupper in C:\repo\trilha-nivel-basico)
+2021-01-26 09:24:50,004 [restartedMain] INFO  b.c.z.p.d.TrilhaNivelBasicoApplication             - No active profile set, falling back to default profiles: default
+2021-01-26 09:24:50,173 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor    - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-01-26 09:24:50,174 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor    - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-01-26 09:24:53,046 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate          - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-01-26 09:24:53,218 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate          - Finished Spring Data repository scanning in 141 ms. Found 1 JPA repository interfaces.
+2021-01-26 09:24:53,754 [restartedMain] INFO  o.s.c.c.s.GenericScope                             - BeanFactory id=d1d22cf2-4f8b-3337-847a-8de5f5f80a04
+2021-01-26 09:24:53,849 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'br.com.zup.primeiro.desafio.client.MarvelComicsClient' of type [org.springframework.cloud.openfeign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-26 09:24:55,467 [restartedMain] INFO  o.s.b.w.e.t.TomcatWebServer                        - Tomcat initialized with port(s): 8080 (http)
+2021-01-26 09:24:55,496 [restartedMain] INFO  o.a.c.h.Http11NioProtocol                          - Initializing ProtocolHandler ["http-nio-8080"]
+2021-01-26 09:24:55,497 [restartedMain] INFO  o.a.c.c.StandardService                            - Starting service [Tomcat]
+2021-01-26 09:24:55,499 [restartedMain] INFO  o.a.c.c.StandardEngine                             - Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-01-26 09:24:55,757 [restartedMain] INFO  o.a.c.c.C.[.[.[/]                                  - Initializing Spring embedded WebApplicationContext
+2021-01-26 09:24:55,757 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext     - Root WebApplicationContext: initialization completed in 5580 ms
+2021-01-26 09:24:56,157 [restartedMain] INFO  o.h.j.i.u.LogHelper                                - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-01-26 09:24:56,290 [restartedMain] INFO  o.h.Version                                        - HHH000412: Hibernate ORM core version 5.4.25.Final
+2021-01-26 09:24:56,561 [restartedMain] INFO  o.h.a.c.Version                                    - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-01-26 09:24:56,790 [restartedMain] INFO  c.z.h.HikariDataSource                             - HikariPool-1 - Starting...
+2021-01-26 09:24:57,397 [restartedMain] INFO  c.z.h.HikariDataSource                             - HikariPool-1 - Start completed.
+2021-01-26 09:24:57,432 [restartedMain] INFO  o.h.d.Dialect                                      - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2021-01-26 09:24:59,371 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator                 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-01-26 09:24:59,389 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean     - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-01-26 09:24:59,429 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer                 - LiveReload server is running on port 35729
+2021-01-26 09:25:00,612 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-26 09:25:01,555 [restartedMain] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-01-26 09:25:01,868 [restartedMain] INFO  o.s.s.c.ThreadPoolTaskExecutor                     - Initializing ExecutorService 'applicationTaskExecutor'
+2021-01-26 09:25:03,159 [restartedMain] INFO  o.a.c.h.Http11NioProtocol                          - Starting ProtocolHandler ["http-nio-8080"]
+2021-01-26 09:25:03,217 [restartedMain] INFO  o.s.b.w.e.t.TomcatWebServer                        - Tomcat started on port(s): 8080 (http) with context path ''
+2021-01-26 09:25:03,573 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper         - Context refreshed
+2021-01-26 09:25:03,626 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper         - Found 1 custom documentation plugin(s)
+2021-01-26 09:25:03,702 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner               - Scanning for api listing references
+2021-01-26 09:25:04,151 [restartedMain] INFO  s.d.s.w.r.o.CachingOperationNameGenerator          - Generating unique operation named: findAllUsingGET_1
+2021-01-26 09:25:04,200 [restartedMain] INFO  b.c.z.p.d.TrilhaNivelBasicoApplication             - Started TrilhaNivelBasicoApplication in 15.35 seconds (JVM running for 17.668)
+2021-01-26 09:25:04,220 [restartedMain] INFO  b.c.z.p.d.TrilhaNivelBasicoApplication             - Teste AB
+2021-01-26 09:29:24,800 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/]                                  - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-01-26 09:29:24,801 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet                          - Initializing Servlet 'dispatcherServlet'
+2021-01-26 09:29:24,805 [http-nio-8080-exec-1] INFO  o.s.w.s.DispatcherServlet                          - Completed initialization in 3 ms
+2021-01-26 09:29:24,913 [http-nio-8080-exec-1] ERROR b.c.z.p.d.e.GlobalExceptionHandler                 - controller m: findAll size: 1000
+2021-01-26 09:29:25,056 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver    - Resolved [br.com.zup.primeiro.desafio.exceptions.PaginationSizeLimitExceededException: controller m: findAll size: 1000]

@@ -1,8 +1,8 @@
 package br.com.zup.primeiro.desafio.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.domain.Sort;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
@@ -31,10 +30,12 @@ import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.PaginationSizeLimitExceededException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping(value = "/customers")
+@Slf4j
 public class CustomerController {
 	private static final int SIZE_MAX_PAGE = 100;
 	private CustomerService service;
@@ -48,10 +49,10 @@ public class CustomerController {
 	@ResponseStatus(OK)
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> findAll(
-			@PageableDefault(sort = "name", direction = Sort.Direction.ASC, page = 0, size = 20) Pageable page) {
+			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
 
 		if(page.getPageSize() > SIZE_MAX_PAGE) {
-			throw new PaginationSizeLimitExceededException("m: findAll" + "size: " + page.getPageSize());
+			throw new PaginationSizeLimitExceededException("controller m: findAll size: " + page.getPageSize());
 		}
 		
 		Page<Customer> pageCustomers = service.findAll(page);
@@ -63,6 +64,7 @@ public class CustomerController {
 		response.put("totalItems", pageCustomers.getTotalElements());
 		response.put("totalPages", pageCustomers.getTotalPages());
 
+		log.info("Passou");
 		return new ResponseEntity<>(response, OK);
 	}
 
