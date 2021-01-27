@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(NOT_FOUND)
 	@ExceptionHandler({ NotFoundException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(NotFoundException exception) {
-		log.error(exception.getMessage());
+		log.info(exception.getMessage());
 		return new ResponseResponse(env.getProperty("validation.not.found"));
 	}
 
@@ -77,14 +77,14 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler({ PaginationSizeLimitExceededException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
-		log.error(exception.getMessage());
+		log.info(exception.getMessage());
 		return new ResponseResponse(env.getProperty("validation.pagination.size.limit.exceeded"));
 	}
 
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody ErrorResponse runtimeExceptionError(Exception exception) {
-		log.error(exception.getMessage());
+		log.info(exception.getMessage());
 		return new ErrorResponse(env.getProperty("validation.internal.error"));
 	}
 
