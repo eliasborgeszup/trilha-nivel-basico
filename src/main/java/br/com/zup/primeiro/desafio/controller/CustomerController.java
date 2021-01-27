@@ -52,7 +52,8 @@ public class CustomerController {
 			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
 
 		if(page.getPageSize() > SIZE_MAX_PAGE) {
-			throw new PaginationSizeLimitExceededException("controller m: findAll size: " + page.getPageSize());
+			log.error("Pagination size limit exceeded = {}, maximum allowed = {}", page.getPageSize(), SIZE_MAX_PAGE);
+			throw new PaginationSizeLimitExceededException("CustomerController: findAll");
 		}
 		
 		Page<Customer> pageCustomers = service.findAll(page);
@@ -64,7 +65,6 @@ public class CustomerController {
 		response.put("totalItems", pageCustomers.getTotalElements());
 		response.put("totalPages", pageCustomers.getTotalPages());
 
-		log.info("Passou");
 		return new ResponseEntity<>(response, OK);
 	}
 
