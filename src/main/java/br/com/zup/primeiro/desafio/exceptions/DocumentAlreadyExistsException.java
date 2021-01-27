@@ -1,9 +1,12 @@
 package br.com.zup.primeiro.desafio.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class DocumentAlreadyExistsException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public DocumentAlreadyExistsException(String message) {
-		super(message);
-	}
+	private String message;
 }

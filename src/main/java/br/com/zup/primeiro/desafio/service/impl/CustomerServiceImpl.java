@@ -12,16 +12,20 @@ import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository repository;
 
 	public String create(CreateCustomerRequest request) {
 		if (repository.existsByCpf(request.getCpf())) {
-			throw new DocumentAlreadyExistsException("service m: created" + "cpf:" + request.getCpf());
+			log.error("Client not created, user = {} register", request.getCpf());
+			throw new DocumentAlreadyExistsException("CustomerServiceImpl: create");
 		}
+
 		return new Customer().create(request, repository);
 	}
 
@@ -30,19 +34,26 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public Customer findByCpf(String cpf) {
-		return repository.findByCpf(cpf).orElseThrow(() -> new NotFoundException("service m: findByCpf cpf: " + cpf));
+		return repository.findByCpf(cpf).orElseThrow(() -> {
+			log.error("Client not update, user = {} not found", cpf);
+			throw new NotFoundException("CustomerServiceImpl: findByCpf");
+		});
 	}
 
 	public String update(String cpf, UpdateCustomerRequest request) {
-		Customer customer = repository.findByCpf(cpf)
-				.orElseThrow(() -> new NotFoundException("service m: findByCpf" + "cpf:" + cpf));
+		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> {
+			log.error("Client not update, user = {} not found", cpf);
+			throw new NotFoundException("CustomerServiceImpl: update");
+		});
 
 		return customer.update(request, repository);
 	}
 
 	public void delete(String cpf) {
-		Customer customer = repository.findByCpf(cpf)
-				.orElseThrow(() -> new NotFoundException("service m: delete" + "cpf:" + cpf));
+		Customer customer = repository.findByCpf(cpf).orElseThrow(() -> {
+			log.error("Client not update, user = {} not found", cpf);
+			throw new NotFoundException(String.format("CustomerServiceImpl: delete, user = %s not found", cpf));
+		});
 
 		customer.delete(customer, repository);
 	}

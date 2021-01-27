@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(UNPROCESSABLE_ENTITY)
 	@ExceptionHandler({ DocumentAlreadyExistsException.class })
 	public @ResponseBody ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
-		log.error(exception.getMessage());
+		log.info(exception.getMessage());
 		return new ResponseResponse(env.getProperty("validation.document.already.exists"));
 	}
 
@@ -82,8 +82,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(RuntimeException.class)
-	public @ResponseBody ErrorResponse runtimeExceptionError(RuntimeException exception) {
+	@ExceptionHandler(Exception.class)
+	public @ResponseBody ErrorResponse runtimeExceptionError(Exception exception) {
 		log.error(exception.getMessage());
 		return new ErrorResponse(env.getProperty("validation.internal.error"));
 	}
