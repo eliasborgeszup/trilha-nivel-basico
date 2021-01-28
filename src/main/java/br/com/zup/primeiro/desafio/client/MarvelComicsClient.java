@@ -14,3 +14,5 @@ public interface MarvelComicsClient {
 			@RequestParam(value = "apikey") String publicKey, 
 			@RequestParam(value = "hash") String hashMD5);
 }
+
+
