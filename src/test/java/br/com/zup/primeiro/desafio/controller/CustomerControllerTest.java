@@ -3,6 +3,9 @@ package br.com.zup.primeiro.desafio.controller;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.apache.commons.io.IOUtils;
+
 import static org.springframework.http.MediaType.*;
 
 import org.junit.Before;
@@ -33,35 +36,29 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldCreateCustomerAndReturnId() throws Exception {
-		this.mockMvc
-				.perform(post("/customers")
-						.content("{\r\n" + "    \"name\": \"Elias\",\r\n" + "    \"birthDate\": \"2021-01-02\",\r\n"
-								+ "    \"cpf\": \"73539183060\", \r\n"
-								+ "    \"email\": \"eliasborges@zup.com.br\",\r\n"
-								+ "    \"phone\": \"34992454428\",\r\n" + "    \"address\": \"Rua X\"\r\n" + "}")
-						.contentType(APPLICATION_JSON))
+		String jsonContent = IOUtils
+				.toString(getClass().getClassLoader().getResourceAsStream("customer/createCustomerRequest.json"));
+
+		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
 				.andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfExists() throws Exception {
-		this.mockMvc
-				.perform(post("/customers")
-						.content("{\"name\": \"Elias\",\r\n" + "    \"birthDate\": \"2021-01-02\",\r\n"
-								+ "    \"cpf\": \"10502544651\", \r\n"
-								+ "    \"email\": \"eliasborges@zup.com.br\",\r\n"
-								+ "    \"phone\": \"34992454428\",\r\n" + "    \"address\": \"Rua X\"}")
-						.contentType(APPLICATION_JSON))
+		String jsonContent = IOUtils
+				.toString(getClass().getClassLoader().getResourceAsStream("customer/createCustomerCpfExistRequest.json"));
+
+		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
 				.andExpect(status().isUnprocessableEntity()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfIsEmpty() throws Exception {
-		this.mockMvc.perform(post("/customers")
-				.content("{\"name\": \"Elias\",\r\n" + "    \"birthDate\": \"2021-01-02\",\r\n"
-						+ "    \"cpf\": \"\", \r\n" + "    \"email\": \"eliasborges@zup.com.br\",\r\n"
-						+ "    \"phone\": \"34992454428\",\r\n" + "    \"address\": \"Rua X\"}")
-				.contentType(APPLICATION_JSON)).andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
+		String jsonContent = IOUtils.toString(
+				getClass().getClassLoader().getResourceAsStream("customer/createCustomerAndNullCpfRequest.json"));
+
+		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
@@ -88,34 +85,28 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldUpdateCustomerAndReturnId() throws Exception {
-		this.mockMvc.perform(put("/customers/{cpf}", buildCPF())
-				.content("{\r\n" + "    \"name\": \"Elias\",\r\n" + "    \"birthDate\": \"1997-01-03\", \r\n"
-						+ "    \"email\": \"eliasborges@unipam.edu.br\",\r\n" + "    \"phone\": \"34992454428\",\r\n"
-						+ "    \"address\": \"Rua Vereador Justo Machado de Brito, 65\"\r\n" + "}")
-				.contentType(APPLICATION_JSON)).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
+		String jsonContent = IOUtils
+				.toString(getClass().getClassLoader().getResourceAsStream("customer/updateCustomerRequest.json"));
+
+		this.mockMvc.perform(put("/customers/{cpf}", buildCPF()).content(jsonContent).contentType(APPLICATION_JSON))
+				.andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotUpdateCustomerWhenCpfNotExists() throws Exception {
-		this.mockMvc
-				.perform(put("/customers/{cpf}", " ")
-						.content("{\r\n" + "    \"name\": \"Elias\",\r\n" + "    \"birthDate\": \"1997-01-03\", \r\n"
-								+ "    \"email\": \"eliasborges@unipam.edu.br\",\r\n"
-								+ "    \"phone\": \"34992454428\",\r\n"
-								+ "    \"address\": \"Rua Vereador Justo Machado de Brito, 65\"\r\n" + "}")
-						.contentType(APPLICATION_JSON))
+		String jsonContent = IOUtils
+				.toString(getClass().getClassLoader().getResourceAsStream("customer/updateCustomerRequest.json"));
+
+		this.mockMvc.perform(put("/customers/{cpf}", " ").content(jsonContent).contentType(APPLICATION_JSON))
 				.andExpect(status().isNotFound()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotUpdateCustomerWhenEmailIsInvalidFormatter() throws Exception {
-		this.mockMvc
-				.perform(put("/customers/{cpf}", buildCPF())
-						.content("{\r\n" + "    \"name\": \"Elias\",\r\n" + "    \"birthDate\": \"1997-01-03\", \r\n"
-								+ "    \"email\": \"eliasborgesunipam.edu.br\",\r\n"
-								+ "    \"phone\": \"34992454428\",\r\n"
-								+ "    \"address\": \"Rua Vereador Justo Machado de Brito, 65\"\r\n" + "}")
-						.contentType(APPLICATION_JSON))
+		String jsonContent = IOUtils.toString(
+				getClass().getClassLoader().getResourceAsStream("customer/updateCustomerAndEmailInvalidRequest.json"));
+
+		this.mockMvc.perform(put("/customers/{cpf}", buildCPF()).content(jsonContent).contentType(APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
 	}
 
