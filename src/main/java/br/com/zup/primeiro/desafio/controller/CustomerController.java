@@ -33,7 +33,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
-@RestController
+@RestController 
 @RequestMapping(value = "/customers")
 @Slf4j
 public class CustomerController {
@@ -46,7 +46,6 @@ public class CustomerController {
 		return service.create(request);
 	}
 
-	@ResponseStatus(OK)
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> findAll(
 			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {

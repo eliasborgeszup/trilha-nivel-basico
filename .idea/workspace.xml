@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e0fe8cd-00ce-4996-b8ea-7ff1ce301f99" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/CustomerControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScriptSQL.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/TrilhaNivelBasicoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/TrilhaNivelBasicoApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/exceptions/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/exceptions/PaginationSizeLimitExceededException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/exceptions/PaginationSizeLimitExceededException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/service/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +36,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="Application.TrilhaNivelBasicoApplication">
+  <component name="RunManager" selected="JUnit.CustomerServiceImplTest.shouldUpdateCustomerAndReturnId">
     <configuration name="TrilhaNivelBasicoApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="br.com.zup.primeiro.desafio.TrilhaNivelBasicoApplication" />
       <module name="trilha-nivel-basico" />
@@ -49,6 +46,22 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CustomerServiceImplTest.shouldUpdateCustomerAndReturnId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="trilha-nivel-basico" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="br.com.zup.primeiro.desafio.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="br.com.zup.primeiro.desafio.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="br.com.zup.primeiro.desafio.service.impl.CustomerServiceImplTest" />
+      <option name="METHOD_NAME" value="shouldUpdateCustomerAndReturnId" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -65,8 +78,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Projeto Principal" />
+        <item itemvalue="JUnit.CustomerServiceImplTest.shouldUpdateCustomerAndReturnId" />
         <item itemvalue="Application.TrilhaNivelBasicoApplication" />
+        <item itemvalue="JUnit.Projeto Principal" />
       </list>
     </recent_temporary>
   </component>
