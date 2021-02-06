@@ -10,13 +10,6 @@ public class TrilhaNivelBasicoApplication {
 		 
 	public static void main(String[] args) {
 		SpringApplication.run(TrilhaNivelBasicoApplication.class, args);
-		String mainLanguage = null;
-		"JAVA".equals(mainLanguage);
-
-		if("JAVA".equals(mainLanguage)){
-			System.out.println();
-		}
-
 	}
 
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.PaginationSizeLimitExceededException;
 import br.com.zup.primeiro.desafio.service.CustomerService;
@@ -33,7 +34,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
-@RestController 
+@RestController
 @RequestMapping(value = "/customers")
 @Slf4j
 public class CustomerController {
@@ -42,19 +43,19 @@ public class CustomerController {
 
 	@ResponseStatus(CREATED)
 	@PostMapping
-	public String create(@Valid @RequestBody CreateCustomerRequest request) {
-		return service.create(request);
+	public CustomerIDResponse create(@Valid @RequestBody CreateCustomerRequest request) {
+		return new CustomerIDResponse(service.create(request));
 	}
 
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> findAll(
 			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
 
-		if(page.getPageSize() > SIZE_MAX_PAGE) {
+		if (page.getPageSize() > SIZE_MAX_PAGE) {
 			log.error("Pagination size limit exceeded = {}, maximum allowed = {}", page.getPageSize(), SIZE_MAX_PAGE);
 			throw new PaginationSizeLimitExceededException("CustomerController: findAll");
 		}
-		
+
 		Page<Customer> pageCustomers = service.findAll(page);
 		List<Customer> customers = pageCustomers.getContent();
 		Map<String, Object> response = new HashMap<>();
@@ -75,8 +76,8 @@ public class CustomerController {
 
 	@ResponseStatus(OK)
 	@PutMapping(value = "/{cpf}")
-	public String update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request) {
-		return service.update(cpf, request);
+	public CustomerIDResponse update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request) {
+		return new CustomerIDResponse(service.update(cpf, request));
 	}
 
 	@ResponseStatus(NO_CONTENT)
