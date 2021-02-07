@@ -42,6 +42,7 @@ public class CustomerController {
 		return new CustomerIDResponse(service.create(request));
 	}
 
+	@ResponseStatus(OK)
 	@GetMapping
 	public Page<CustomerResponse> findAll(
 			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
