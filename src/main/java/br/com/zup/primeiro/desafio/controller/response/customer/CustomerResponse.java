@@ -17,13 +17,8 @@ public class CustomerResponse {
 	private String phone;
 	private String address;
 
-	public CustomerResponse(Customer customer) {
-		this.id = customer.getId();
-		this.name = customer.getName();
-		this.birthDate = customer.getBirthDate();
-		this.cpf = customer.getCpf();
-		this.email = customer.getEmail();
-		this.phone = customer.getPhone();
-		this.address = customer.getAddress();
+	public static CustomerResponse fromCustomer(Customer customer) {
+		return new CustomerResponse(customer.getId(), customer.getName(), customer.getBirthDate(), customer.getCpf(),
+				customer.getEmail(), customer.getPhone(), customer.getAddress());
 	}
 }
