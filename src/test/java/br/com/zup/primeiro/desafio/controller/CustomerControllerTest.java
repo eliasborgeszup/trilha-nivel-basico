@@ -1,31 +1,52 @@
 package br.com.zup.primeiro.desafio.controller;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 import org.apache.commons.io.IOUtils;
-
-import static org.springframework.http.MediaType.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
+import br.com.zup.primeiro.desafio.entity.Customer;
+import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Sql(scripts = "/script.sql")
+@Transactional
 public class CustomerControllerTest {
 
 	@Autowired
-	public WebApplicationContext context;
+	private WebApplicationContext context;
+
+	@Autowired
+	private CustomerRepository repository;
 
 	private MockMvc mockMvc;
 
@@ -36,28 +57,41 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldCreateCustomerAndReturnId() throws Exception {
-		String jsonContent = IOUtils
-				.toString(getClass().getClassLoader().getResourceAsStream("customer/createCustomerRequest.json"));
 
-		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
-				.andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print());
+		String path = "customer/createCustomerRequest.json";
+
+		String contentAsString = this.mockMvc
+				.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
+				.andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print())
+				.andExpect(jsonPath("$.id", notNullValue())).andReturn().getResponse().getContentAsString();
+
+		CustomerIDResponse customerIDResponse = new ObjectMapper().readValue(contentAsString, CustomerIDResponse.class);
+
+		Customer customer = repository.getOne(customerIDResponse.getId());
+
+		assertEquals(customerIDResponse.getId(), customer.getId());
+		assertEquals("Elias", customer.getName());
+		assertEquals(LocalDate.of(1997, 01, 03), customer.getBirthDate());
+		assertEquals("73539183060", customer.getCpf());
+		assertEquals("eliasborges@unipam.edu.br", customer.getEmail());
+		assertEquals("34988154428", customer.getPhone());
+		assertEquals("Rua Vereador Justo Machado de Brito, 61", customer.getAddress());
+
 	}
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfExists() throws Exception {
-		String jsonContent = IOUtils
-				.toString(getClass().getClassLoader().getResourceAsStream("customer/createCustomerCpfExistRequest.json"));
+		String path = "customer/createCustomerCpfExistRequest.json";
 
-		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
+		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
 				.andExpect(status().isUnprocessableEntity()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfIsEmpty() throws Exception {
-		String jsonContent = IOUtils.toString(
-				getClass().getClassLoader().getResourceAsStream("customer/createCustomerAndNullCpfRequest.json"));
+		String path = "customer/createCustomerAndNullCpfRequest.json";
 
-		this.mockMvc.perform(post("/customers").content(jsonContent).contentType(APPLICATION_JSON))
+		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
 	}
 
@@ -85,39 +119,44 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldUpdateCustomerAndReturnId() throws Exception {
-		String jsonContent = IOUtils
-				.toString(getClass().getClassLoader().getResourceAsStream("customer/updateCustomerRequest.json"));
+		String path = "customer/updateCustomerRequest.json";
 
-		this.mockMvc.perform(put("/customers/{cpf}", buildCPF()).content(jsonContent).contentType(APPLICATION_JSON))
+		this.mockMvc
+				.perform(
+						put("/customers/{cpf}", buildCPF()).content(getFileContent(path)).contentType(APPLICATION_JSON))
 				.andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotUpdateCustomerWhenCpfNotExists() throws Exception {
-		String jsonContent = IOUtils
-				.toString(getClass().getClassLoader().getResourceAsStream("customer/updateCustomerRequest.json"));
+		String path = "customer/updateCustomerRequest.json";
 
-		this.mockMvc.perform(put("/customers/{cpf}", " ").content(jsonContent).contentType(APPLICATION_JSON))
+		this.mockMvc.perform(put("/customers/{cpf}", " ").content(getFileContent(path)).contentType(APPLICATION_JSON))
 				.andExpect(status().isNotFound()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldNotUpdateCustomerWhenEmailIsInvalidFormatter() throws Exception {
-		String jsonContent = IOUtils.toString(
-				getClass().getClassLoader().getResourceAsStream("customer/updateCustomerAndEmailInvalidRequest.json"));
+		String path = "customer/updateCustomerAndEmailInvalidRequest.json";
 
-		this.mockMvc.perform(put("/customers/{cpf}", buildCPF()).content(jsonContent).contentType(APPLICATION_JSON))
+		this.mockMvc
+				.perform(
+						put("/customers/{cpf}", buildCPF()).content(getFileContent(path)).contentType(APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void shouldDeleteCustomer() throws Exception {
-		this.mockMvc.perform(delete("/customers/{cpf}", "73539183060")).andExpect(status().isNoContent());
+		this.mockMvc.perform(delete("/customers/{cpf}", buildCPF())).andExpect(status().isNoContent());
 	}
 
 	@Test
 	public void shouldNotDeleteCustomerWhenCpfNotExists() throws Exception {
 		this.mockMvc.perform(delete("/customers/{cpf}", " ")).andExpect(status().isNotFound());
+	}
+
+	private String getFileContent(String path) throws IOException {
+		return IOUtils.toString(getClass().getClassLoader().getResourceAsStream(path));
 	}
 
 	private String buildCPF() {

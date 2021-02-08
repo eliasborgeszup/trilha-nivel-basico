@@ -1,0 +1,1 @@
+INSERT INTO `trailtest`.`customer` (`id`, `address`, `birth_date`, `cpf`, `email`, `name`, `phone`) VALUES ('9ee70d86-4e1a-4616-af7f-d18cd7c588bc', 'Rua Vereador Justo Machado de Brito, 65', '1997-01-03', '10502544651', 'eliasborges@unipam.edu.br', 'Elias', '34992454428');
