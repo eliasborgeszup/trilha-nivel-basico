@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
+import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
 @RunWith(SpringRunner.class)
@@ -62,25 +64,27 @@ public class CustomerControllerTest {
 
 		String contentAsString = this.mockMvc
 				.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print())
-				.andExpect(jsonPath("$.id", notNullValue())).andReturn().getResponse().getContentAsString();
+				.andExpect(status().isCreated()).andExpect(jsonPath("id", notNullValue())).andReturn().getResponse()
+				.getContentAsString();
 
 		CustomerIDResponse customerIDResponse = new ObjectMapper().readValue(contentAsString, CustomerIDResponse.class);
 
 		Customer customer = repository.getOne(customerIDResponse.getId());
 
+		assertNotNull(customer);
 		assertEquals(customerIDResponse.getId(), customer.getId());
+
 		assertEquals("Elias", customer.getName());
 		assertEquals(LocalDate.of(1997, 01, 03), customer.getBirthDate());
 		assertEquals("73539183060", customer.getCpf());
 		assertEquals("eliasborges@unipam.edu.br", customer.getEmail());
 		assertEquals("34988154428", customer.getPhone());
 		assertEquals("Rua Vereador Justo Machado de Brito, 61", customer.getAddress());
-
 	}
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfExists() throws Exception {
+
 		String path = "customer/createCustomerCpfExistRequest.json";
 
 		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
@@ -89,6 +93,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldNotCreateCustomerWhenCpfIsEmpty() throws Exception {
+
 		String path = "customer/createCustomerAndNullCpfRequest.json";
 
 		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
@@ -97,6 +102,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void findAllCustomersAndReturnListSucess() throws Exception {
+
 		this.mockMvc.perform(get("/customers")).andExpect(status().isOk())
 				.andExpect(content().string(containsString(buildCPF())));
 	}
@@ -121,18 +127,36 @@ public class CustomerControllerTest {
 	public void shouldUpdateCustomerAndReturnId() throws Exception {
 		String path = "customer/updateCustomerRequest.json";
 
-		this.mockMvc
+		String contentAsString = this.mockMvc
 				.perform(
 						put("/customers/{cpf}", buildCPF()).content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
+				.andExpect(status().isOk()).andExpect(jsonPath("id", notNullValue())).andReturn().getResponse().getContentAsString();
+
+		CustomerIDResponse customerIDResponse = new ObjectMapper().readValue(contentAsString, CustomerIDResponse.class);
+
+		Customer customer = repository.getOne(customerIDResponse.getId());
+
+		assertNotNull(customer);
+		assertEquals(customerIDResponse.getId(), customer.getId());
+
+		assertEquals("Elias", customer.getName());
+		assertEquals(LocalDate.of(1997, 01, 03), customer.getBirthDate());
+		assertEquals("10502544651", customer.getCpf());
+		assertEquals("eliasborges@unipam.edu.br", customer.getEmail());
+		assertEquals("34992454428", customer.getPhone());
+		assertEquals("Rua Vereador Justo Machado de Brito, 65", customer.getAddress());
 	}
 
 	@Test
 	public void shouldNotUpdateCustomerWhenCpfNotExists() throws Exception {
 		String path = "customer/updateCustomerRequest.json";
 
-		this.mockMvc.perform(put("/customers/{cpf}", " ").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andDo(MockMvcResultHandlers.print());
+		String contentAsString = this.mockMvc.perform(put("/customers/{cpf}", "10502544652").content(getFileContent(path)).contentType(APPLICATION_JSON))
+				.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
+		
+		NotFoundException notFoundException = new ObjectMapper().readValue(contentAsString, NotFoundException.class);
+		
+		assertEquals("Documento nao encontrado.", notFoundException.getMessage());
 	}
 
 	@Test
