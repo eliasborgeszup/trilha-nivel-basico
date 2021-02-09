@@ -34,6 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
+import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
@@ -119,8 +120,23 @@ public class CustomerControllerTest {
 
 	@Test
 	public void findByCpfAndReturnCustomer() throws Exception {
-		this.mockMvc.perform(get("/customers/{cpf}", buildCPF())).andExpect(status().isOk())
-				.andExpect(jsonPath("cpf", equalTo(buildCPF())));
+		
+		String contentAsString = this.mockMvc.perform(get("/customers/{cpf}", buildCPF()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("cpf", equalTo(buildCPF())))
+				.andReturn().getResponse().getContentAsString();
+
+		CustomerResponse customerResponse = new ObjectMapper().readValue(contentAsString, CustomerResponse.class);
+		
+		assertNotNull(customerResponse);
+		
+		assertEquals("9ee70d86-4e1a-4616-af7f-d18cd7c588bc" , customerResponse.getId());
+		assertEquals("Rua Vereador Justo Machado de Brito, 65", customerResponse.getAddress());
+		assertEquals(LocalDate.of(1997, 01, 03), customerResponse.getBirthDate());
+		assertEquals("10502544651", customerResponse.getCpf());
+		assertEquals("eliasborges@unipam.edu.br", customerResponse.getEmail());
+		assertEquals("Elias", customerResponse.getName());
+		assertEquals("34992454428", customerResponse.getPhone());
 	}
 
 	@Test
