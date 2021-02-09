@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
+import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
@@ -91,10 +92,15 @@ public class CustomerControllerTest {
 
 		String path = "customer/createCustomerCpfExistRequest.json";
 
-		this.mockMvc.perform(post("/customers")
+		String contentAsString = this.mockMvc.perform(post("/customers")
 				.content(getFileContent(path))
 				.contentType(APPLICATION_JSON))
-				.andExpect(status().isUnprocessableEntity());
+				.andExpect(status().isUnprocessableEntity())
+				.andReturn().getResponse().getContentAsString();
+		
+		DocumentAlreadyExistsException documentAlreadyExistsException = new ObjectMapper().readValue(contentAsString, DocumentAlreadyExistsException.class);
+
+		assertEquals("Documento existente.", documentAlreadyExistsException.getMessage());
 	}
 
 	@Test
@@ -102,8 +108,11 @@ public class CustomerControllerTest {
 
 		String path = "customer/createCustomerAndNullCpfRequest.json";
 
-		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isBadRequest());
+		this.mockMvc.perform(post("/customers")
+						.content(getFileContent(path))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("[CPF] - Nao e permitido campos vazios.")));
 	}
 
 	@Test
