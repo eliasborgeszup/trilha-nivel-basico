@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 public class CustomerResponse {
 	private String id;
 	private String name;
-	
-	 @JsonDeserialize(using = LocalDateDeserializer.class)
-     @JsonSerialize(using = LocalDateSerializer.class)
+
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate birthDate;
 	private String cpf;
 	private String email;

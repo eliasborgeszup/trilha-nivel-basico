@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e0fe8cd-00ce-4996-b8ea-7ff1ce301f99" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/CustomerControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/TrilhaNivelBasicoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/TrilhaNivelBasicoApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/response/customer/CustomerResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/response/customer/CustomerResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/response/marvel/ComicsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/zup/primeiro/desafio/controller/response/marvel/ComicsResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/CustomerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/CustomerControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/MarvelControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/br/com/zup/primeiro/desafio/controller/MarvelControllerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

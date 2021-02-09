@@ -1,7 +1,6 @@
 package br.com.zup.primeiro.desafio.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,6 +37,7 @@ import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.DocumentAlreadyExistsException;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
+import br.com.zup.primeiro.desafio.exceptions.PaginationSizeLimitExceededException;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
 
 @RunWith(SpringRunner.class)
@@ -112,19 +112,39 @@ public class CustomerControllerTest {
 						.content(getFileContent(path))
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(content().string(containsString("[CPF] - Nao e permitido campos vazios.")));
+				.andExpect(content().string(containsString("[CPF] - CPF invalido.")));
 	}
 
 	@Test
 	public void findAllCustomersAndReturnListSucess() throws Exception {
 
-		this.mockMvc.perform(get("/customers")).andExpect(status().isOk())
-				.andExpect(content().string(containsString(buildCPF())));
+		this.mockMvc.perform(get("/customers"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("9ee70d86-4e1a-4616-af7f-d18cd7c588bc")))
+				.andExpect(content().string(containsString("Rua Vereador Justo Machado de Brito, 65")))
+				.andExpect(content().string(containsString("eliasborges@unipam.edu.br")))
+				.andExpect(content().string(containsString("Elias")))
+				.andExpect(content().string(containsString("34992454428")))
+				.andExpect(content().string(containsString("10502544651")));
+		
+		//List<Customer> customers = new ObjectMapper().readValue(contentAsString, new ObjectMapper().getTypeFactory().constructCollectionType(List.class, Customer.class));
+	
+		//List<Customer> allCustomers = repository.findAll();
+		
+		//assertEquals(customers.get(0).getId(), allCustomers.get(0).getId());
 	}
 
 	@Test
 	public void shouldNotFindAllWhenPageSizeBigger() throws Exception {
-		this.mockMvc.perform(get("/customers?page=1000&size=1000&sort=id")).andExpect(status().isBadRequest());
+		String url = "/customers?page=1000&size=1000&sort=id";
+		
+		String contentAsString = this.mockMvc.perform(get(url))
+				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+		
+		PaginationSizeLimitExceededException exception = new ObjectMapper().readValue(contentAsString, PaginationSizeLimitExceededException.class);
+
+		assertEquals("Quantidade de paginas maior que o permitido.", exception.getMessage());
 	}
 
 	@Test
@@ -132,7 +152,7 @@ public class CustomerControllerTest {
 		
 		String contentAsString = this.mockMvc.perform(get("/customers/{cpf}", buildCPF()))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("cpf", equalTo(buildCPF())))
+				.andExpect(jsonPath("id", notNullValue()))
 				.andReturn().getResponse().getContentAsString();
 
 		CustomerResponse customerResponse = new ObjectMapper().readValue(contentAsString, CustomerResponse.class);
@@ -150,7 +170,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldNotFindCustomerByCpfWhenNotExists() throws Exception {
-		String contentAsString = this.mockMvc.perform(get("/customers/{cpf}", " "))
+		String contentAsString = this.mockMvc.perform(get("/customers/{cpf}", "10502544652"))
 				.andExpect(status().isNotFound())
 				.andReturn().getResponse().getContentAsString();
 		
@@ -228,7 +248,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldNotDeleteCustomerWhenCpfNotExists() throws Exception {
-		String contentAsString = this.mockMvc.perform(delete("/customers/{cpf}", " "))
+		String contentAsString = this.mockMvc.perform(delete("/customers/{cpf}", "10502544652"))
 				.andExpect(status().isNotFound())
 				.andReturn().getResponse().getContentAsString();
 		

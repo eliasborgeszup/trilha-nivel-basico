@@ -1,6 +1,7 @@
 package br.com.zup.primeiro.desafio.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,20 +19,26 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MarvelControllerTest {
-	
+
 	@Autowired
 	public WebApplicationContext context;
 
 	private MockMvc mockMvc;
-	
+
 	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
 	}
+
 	@Test
 	public void findAllCustomersAndReturnMarvelResponse() throws Exception {
-		this.mockMvc.perform(get("/marvel/comics")).andExpect(status().isOk())
-		.andExpect(content().string(containsString("© 2021 MARVEL")));
+		String contentAsString = this.mockMvc.perform(get("/marvel/comics"))
+					.andExpect(status().isOk())
+					.andExpect(content().string(containsString("© 2021 MARVEL")))
+					.andExpect(content().string(containsString("Marvel Previews (2017)")))
+					.andReturn().getResponse().getContentAsString();
+
+		assertNotNull(contentAsString);
 	}
 
 }
