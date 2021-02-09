@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -26,15 +27,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.zup.primeiro.desafio.controller.response.commons.ErrorResponse;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
@@ -191,6 +189,10 @@ public class CustomerControllerTest {
 	@Test
 	public void shouldDeleteCustomer() throws Exception {
 		this.mockMvc.perform(delete("/customers/{cpf}", buildCPF())).andExpect(status().isNoContent());
+		
+		Optional<Customer> customer = repository.findByCpf(buildCPF());
+		
+		assertEquals(customer.isEmpty(), true);
 	}
 
 	@Test
