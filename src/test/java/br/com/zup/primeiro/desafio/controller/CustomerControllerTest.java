@@ -125,7 +125,13 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldNotFindCustomerByCpfWhenNotExists() throws Exception {
-		this.mockMvc.perform(get("/customers/{cpf}", " ")).andExpect(status().isNotFound());
+		String contentAsString = this.mockMvc.perform(get("/customers/{cpf}", " "))
+				.andExpect(status().isNotFound())
+				.andReturn().getResponse().getContentAsString();
+		
+		NotFoundException notFoundException = new ObjectMapper().readValue(contentAsString, NotFoundException.class);
+
+		assertEquals("Documento nao encontrado.", notFoundException.getMessage());
 	}
 
 	@Test
