@@ -197,7 +197,13 @@ public class CustomerControllerTest {
 
 	@Test
 	public void shouldNotDeleteCustomerWhenCpfNotExists() throws Exception {
-		this.mockMvc.perform(delete("/customers/{cpf}", " ")).andExpect(status().isNotFound());
+		String contentAsString = this.mockMvc.perform(delete("/customers/{cpf}", " "))
+				.andExpect(status().isNotFound())
+				.andReturn().getResponse().getContentAsString();
+		
+		NotFoundException notFoundException = new ObjectMapper().readValue(contentAsString, NotFoundException.class);
+
+		assertEquals("Documento nao encontrado.", notFoundException.getMessage());
 	}
 
 	private String getFileContent(String path) throws IOException {
