@@ -29,10 +29,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.zup.primeiro.desafio.controller.response.commons.ErrorResponse;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
@@ -63,9 +65,12 @@ public class CustomerControllerTest {
 		String path = "customer/createCustomerRequest.json";
 
 		String contentAsString = this.mockMvc
-				.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isCreated()).andExpect(jsonPath("id", notNullValue())).andReturn().getResponse()
-				.getContentAsString();
+				.perform(post("/customers")
+						.content(getFileContent(path))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("id", notNullValue()))
+				.andReturn().getResponse().getContentAsString();
 
 		CustomerIDResponse customerIDResponse = new ObjectMapper().readValue(contentAsString, CustomerIDResponse.class);
 
@@ -87,8 +92,10 @@ public class CustomerControllerTest {
 
 		String path = "customer/createCustomerCpfExistRequest.json";
 
-		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isUnprocessableEntity()).andDo(MockMvcResultHandlers.print());
+		this.mockMvc.perform(post("/customers")
+				.content(getFileContent(path))
+				.contentType(APPLICATION_JSON))
+				.andExpect(status().isUnprocessableEntity());
 	}
 
 	@Test
@@ -97,7 +104,7 @@ public class CustomerControllerTest {
 		String path = "customer/createCustomerAndNullCpfRequest.json";
 
 		this.mockMvc.perform(post("/customers").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -129,8 +136,12 @@ public class CustomerControllerTest {
 
 		String contentAsString = this.mockMvc
 				.perform(
-						put("/customers/{cpf}", buildCPF()).content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath("id", notNullValue())).andReturn().getResponse().getContentAsString();
+						put("/customers/{cpf}", buildCPF())
+						.content(getFileContent(path))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("id", notNullValue()))
+				.andReturn().getResponse().getContentAsString();
 
 		CustomerIDResponse customerIDResponse = new ObjectMapper().readValue(contentAsString, CustomerIDResponse.class);
 
@@ -151,22 +162,30 @@ public class CustomerControllerTest {
 	public void shouldNotUpdateCustomerWhenCpfNotExists() throws Exception {
 		String path = "customer/updateCustomerRequest.json";
 
-		String contentAsString = this.mockMvc.perform(put("/customers/{cpf}", "10502544652").content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
-		
+		String contentAsString = this.mockMvc
+				.perform(put("/customers/{cpf}", "10502544652")
+						.content(getFileContent(path))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isNotFound())
+				.andReturn().getResponse().getContentAsString();
+
 		NotFoundException notFoundException = new ObjectMapper().readValue(contentAsString, NotFoundException.class);
-		
+
 		assertEquals("Documento nao encontrado.", notFoundException.getMessage());
 	}
 
 	@Test
-	public void shouldNotUpdateCustomerWhenEmailIsInvalidFormatter() throws Exception {
+	public void shouldNotUpdateCustomerWhenFieldsInvalidFormatter() throws Exception {
 		String path = "customer/updateCustomerAndEmailInvalidRequest.json";
 
 		this.mockMvc
-				.perform(
-						put("/customers/{cpf}", buildCPF()).content(getFileContent(path)).contentType(APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andDo(MockMvcResultHandlers.print());
+				.perform(put("/customers/{cpf}", buildCPF())
+						.content(getFileContent(path))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("[EMAIL] - Email invalido.")))
+				.andExpect(content().string(containsString("[PHONE] - O valor informado excede ou nao atende a quantidade de caracteres permitidos.")))
+				.andExpect(content().string(containsString("[NAME] - Nao e permitido campos vazios.")));
 	}
 
 	@Test
