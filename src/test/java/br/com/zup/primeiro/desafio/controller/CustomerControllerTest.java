@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
@@ -30,7 +32,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse;
@@ -118,20 +123,24 @@ public class CustomerControllerTest {
 	@Test
 	public void findAllCustomersAndReturnListSucess() throws Exception {
 
-		this.mockMvc.perform(get("/customers"))
+		String contentAsString = this.mockMvc.perform(get("/customers"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("9ee70d86-4e1a-4616-af7f-d18cd7c588bc")))
 				.andExpect(content().string(containsString("Rua Vereador Justo Machado de Brito, 65")))
 				.andExpect(content().string(containsString("eliasborges@unipam.edu.br")))
 				.andExpect(content().string(containsString("Elias")))
 				.andExpect(content().string(containsString("34992454428")))
-				.andExpect(content().string(containsString("10502544651")));
+				.andExpect(content().string(containsString("10502544651")))
+				.andReturn().getResponse().getContentAsString();
 		
-		//List<Customer> customers = new ObjectMapper().readValue(contentAsString, new ObjectMapper().getTypeFactory().constructCollectionType(List.class, Customer.class));
-	
-		//List<Customer> allCustomers = repository.findAll();
+		ObjectNode node = new ObjectMapper().readValue(contentAsString, ObjectNode.class);
+		JsonNode content = node.get("content");
+		assertNotNull(content);
 		
-		//assertEquals(customers.get(0).getId(), allCustomers.get(0).getId());
+
+		List<CustomerResponse> allCustomers = new ObjectMapper().readValue(content.toString(), new TypeReference<List<CustomerResponse>>() {});
+		assertTrue(allCustomers != null && !allCustomers.isEmpty());
+		assertEquals(1, allCustomers.size());
 	}
 
 	@Test
