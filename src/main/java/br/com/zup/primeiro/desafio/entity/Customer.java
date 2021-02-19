@@ -6,15 +6,13 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
+import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse;
 import br.com.zup.primeiro.desafio.repository.CustomerRepository;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
@@ -44,6 +42,19 @@ public class Customer {
 
 	@Column(nullable = false)
 	private String address;
+
+	@OneToOne(mappedBy = "customer")
+	private Cart card;
+
+	public Customer(String id, String name, LocalDate birthDate, String cpf, String email, String phone, String address) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.cpf = cpf;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+	}
 
 	public String create(CreateCustomerRequest request, CustomerRepository repository) {
 		this.id = UUID.randomUUID().toString();

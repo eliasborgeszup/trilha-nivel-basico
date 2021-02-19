@@ -32,42 +32,42 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(value = "/customers")
 public class CustomerController {
-	private static final int SIZE_MAX_PAGE = 100;
+    private static final Integer SIZE_MAX_PAGE = 100;
 
-	private CustomerService service;
+    private final CustomerService service;
 
-	@ResponseStatus(CREATED)
-	@PostMapping
-	public CustomerIDResponse create(@Valid @RequestBody CreateCustomerRequest request) {
-		return new CustomerIDResponse(service.create(request));
-	}
+    @ResponseStatus(CREATED)
+    @PostMapping
+    public CustomerIDResponse create(@Valid @RequestBody CreateCustomerRequest request) {
+        return new CustomerIDResponse(service.create(request));
+    }
 
-	@ResponseStatus(OK)
-	@GetMapping
-	public Page<CustomerResponse> findAll(
-			@PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
+    @ResponseStatus(OK)
+    @GetMapping
+    public Page<CustomerResponse> findAll(
+            @PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
 
-		PageSizeValidator.validate(SIZE_MAX_PAGE, page.getPageSize());
+        PageSizeValidator.validate(SIZE_MAX_PAGE, page.getPageSize());
 
-		return service.findAll(page).map(CustomerResponse::fromCustomer);
-	}
+        return service.findAll(page).map(CustomerResponse::fromCustomer);
+    }
 
-	@ResponseStatus(OK)
-	@GetMapping(value = "/{cpf}")
-	public Customer findByCpf(@PathVariable String cpf) {
-		return service.findByCpf(cpf);
-	}
+    @ResponseStatus(OK)
+    @GetMapping(value = "/{cpf}")
+    public CustomerResponse findByCpf(@PathVariable String cpf) {
+        return CustomerResponse.fromCustomer(service.findByCpf(cpf));
+    }
 
-	@ResponseStatus(OK)
-	@PutMapping(value = "/{cpf}")
-	public CustomerIDResponse update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request) {
-		return new CustomerIDResponse(service.update(cpf, request));
-	}
+    @ResponseStatus(OK)
+    @PutMapping(value = "/{cpf}")
+    public CustomerIDResponse update(@PathVariable String cpf, @Valid @RequestBody UpdateCustomerRequest request) {
+        return new CustomerIDResponse(service.update(cpf, request));
+    }
 
-	@ResponseStatus(NO_CONTENT)
-	@DeleteMapping(value = "/{cpf}")
-	public void delete(@PathVariable String cpf) {
-		service.delete(cpf);
-	}
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping(value = "/{cpf}")
+    public void delete(@PathVariable String cpf) {
+        service.delete(cpf);
+    }
 
 }

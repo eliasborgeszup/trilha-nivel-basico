@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(value = "/marvel")
 public class MarvelController {
 
-	private MarvelComicsService service;
+	private final MarvelComicsService service;
 
 	@ResponseStatus(OK)
 	@GetMapping(value = "/comics")

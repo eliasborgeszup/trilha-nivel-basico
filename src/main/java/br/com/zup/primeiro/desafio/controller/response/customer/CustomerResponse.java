@@ -22,6 +22,7 @@ public class CustomerResponse {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate birthDate;
+
 	private String cpf;
 	private String email;
 	private String phone;
