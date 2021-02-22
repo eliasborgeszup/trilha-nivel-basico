@@ -1,7 +1,7 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
+
 import br.com.zup.primeiro.desafio.controller.request.cart.UpdateCartRequest;
-import br.com.zup.primeiro.desafio.controller.response.cart.CartResponse;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import br.com.zup.primeiro.desafio.repository.CartRepository;
 import br.com.zup.primeiro.desafio.service.CartService;
@@ -29,6 +29,7 @@ public class CartServiceImpl implements CartService {
         return repository.findAll(page);
     }
 
+    @Override
     public String update(String idCart, UpdateCartRequest updateCartRequest) {
         return null;
     }

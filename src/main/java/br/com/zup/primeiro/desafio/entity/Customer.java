@@ -44,7 +44,7 @@ public class Customer {
 	private String address;
 
 	@OneToOne(mappedBy = "customer")
-	private Cart card;
+	private Cart cart;
 
 	public Customer(String id, String name, LocalDate birthDate, String cpf, String email, String phone, String address) {
 		this.id = id;

@@ -52,8 +52,8 @@ public class MarvelComicsServiceImplTest {
 	private List<ResultsResponse> buildListResultsResponse() {
 		List<ResultsResponse> results = new ArrayList<>();
 
-		ResultsResponse result82967 = new ResultsResponse(82967L, "Marvel Previews (2017)");
-		ResultsResponse result82970 = new ResultsResponse(82970L, "Marvel Previews (2017)");
+		ResultsResponse result82967 = new ResultsResponse(82967L, "Marvel Previews (2017)", "http://gateway.marvel.com/v1/public/comics/82967");
+		ResultsResponse result82970 = new ResultsResponse(82970L, "Marvel Previews (2017)", "http://gateway.marvel.com/v1/public/comics/82967");
 
 		results.add(result82967);
 		results.add(result82970);
