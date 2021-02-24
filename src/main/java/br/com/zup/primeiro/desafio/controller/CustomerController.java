@@ -24,7 +24,6 @@ import br.com.zup.primeiro.desafio.controller.request.customer.CreateCustomerReq
 import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerIDResponse;
 import br.com.zup.primeiro.desafio.controller.response.customer.CustomerResponse;
-import br.com.zup.primeiro.desafio.entity.Customer;
 import br.com.zup.primeiro.desafio.service.CustomerService;
 import lombok.AllArgsConstructor;
 

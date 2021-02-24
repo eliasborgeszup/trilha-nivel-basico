@@ -3,7 +3,7 @@ package br.com.zup.primeiro.desafio.controller;
 
 import br.com.zup.primeiro.desafio.config.PageSizeValidator;
 import br.com.zup.primeiro.desafio.controller.request.cart.UpdateCartRequest;
-import br.com.zup.primeiro.desafio.controller.response.cart.CartResponse;
+import br.com.zup.primeiro.desafio.controller.response.cartItem.CartItemResponse;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import br.com.zup.primeiro.desafio.service.CartService;
 import lombok.AllArgsConstructor;
@@ -26,11 +26,11 @@ public class CartController {
 
     private final CartService service;
 
-    @ResponseStatus(CREATED)
-    @PostMapping
-    public String created(String idComics) {
-        return service.create(idComics);
-    }
+//    @ResponseStatus(CREATED)
+//    @PostMapping(value = "/{idComics}")
+//    public CartIDResponse created(@PathVariable Long idComics, @Valid @RequestBody CreatedCartItemRequest request) {
+//        return new CartIDResponse(service.create(idComics, request));
+//    }
 
     @ResponseStatus(OK)
     @GetMapping(value = "/{idCart}")
@@ -39,19 +39,23 @@ public class CartController {
     }
 
     @ResponseStatus(OK)
+    @GetMapping(value = "/customers/{customerId}")
+    public Cart findByCustomerId(@PathVariable String customerId) { return service.findByCustomerId(customerId); }
+
+/*    @ResponseStatus(OK)
     @GetMapping
-    public Page<CartResponse> findAll(
+    public Page<CartItemResponse> findAll(
             @PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
 
         PageSizeValidator.validate(SIZE_MAX_PAGE, page.getPageSize());
 
         return service.findAll(page).map(CartResponse::fromCart);
-    }
+    }*/
 
     @ResponseStatus(OK)
     @PutMapping(value = "/{idCart}")
-    public String update(@PathVariable String idCart, @Valid @RequestBody UpdateCartRequest updateCartRequest) {
-        return service.update(idCart, updateCartRequest);
+    public String update(@PathVariable String idCart, @Valid @RequestBody UpdateCartRequest request) {
+        return service.update(idCart, request);
     }
 
     @ResponseStatus(NO_CONTENT)

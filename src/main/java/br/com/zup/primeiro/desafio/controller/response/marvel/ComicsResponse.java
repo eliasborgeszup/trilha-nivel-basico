@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class ComicsResponse {
 	private String copyright;

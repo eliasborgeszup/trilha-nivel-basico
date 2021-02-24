@@ -43,19 +43,6 @@ public class Customer {
 	@Column(nullable = false)
 	private String address;
 
-	@OneToOne(mappedBy = "customer")
-	private Cart cart;
-
-	public Customer(String id, String name, LocalDate birthDate, String cpf, String email, String phone, String address) {
-		this.id = id;
-		this.name = name;
-		this.birthDate = birthDate;
-		this.cpf = cpf;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-	}
-
 	public String create(CreateCustomerRequest request, CustomerRepository repository) {
 		this.id = UUID.randomUUID().toString();
 		this.name = request.getName();

@@ -4,4 +4,6 @@ import br.com.zup.primeiro.desafio.controller.response.marvel.ComicsResponse;
 
 public interface MarvelComicsService {
 	public ComicsResponse findAll();
+
+	public ComicsResponse findById(Long id);
 }

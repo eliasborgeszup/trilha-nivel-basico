@@ -28,64 +28,69 @@ import lombok.extern.slf4j.Slf4j;
 @PropertySource("classpath:messages.properties")
 public class GlobalExceptionHandler {
 
-	public static final int STR_FIELD_NAME = 0;
-	public static final int IGNORE_DOT_POST = 1;
+    public static final int STR_FIELD_NAME = 0;
+    public static final int IGNORE_DOT_POST = 1;
 
-	@Autowired
-	private Environment env;
+    @Autowired
+    private Environment env;
 
-	@ResponseStatus(BAD_REQUEST)
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public @ResponseBody List<ErrorResponse> handlerMethodArgumentNotValidException(
-			MethodArgumentNotValidException exception) {
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public @ResponseBody
+    List<ErrorResponse> handlerMethodArgumentNotValidException(
+            MethodArgumentNotValidException exception) {
 
-		List<ErrorResponse> validationErrors = new ArrayList<>();
+        List<ErrorResponse> validationErrors = new ArrayList<>();
 
-		for (ObjectError error : exception.getBindingResult().getAllErrors()) {
+        for (ObjectError error : exception.getBindingResult().getAllErrors()) {
 
-			if (nonNull(error.getCodes()) && nonNull(error.getCodes()[STR_FIELD_NAME])) {
-				String fieldName = error.getCodes()[STR_FIELD_NAME];
+            if (nonNull(error.getCodes()) && nonNull(error.getCodes()[STR_FIELD_NAME])) {
+                String fieldName = error.getCodes()[STR_FIELD_NAME];
 
-				StringBuilder messageDisplayed = new StringBuilder();
-				messageDisplayed.append("[");
-				messageDisplayed
-						.append(fieldName.substring(fieldName.lastIndexOf(".") + IGNORE_DOT_POST).toUpperCase());
-				messageDisplayed.append("] - ");
-				messageDisplayed.append(error.getDefaultMessage());
+                StringBuilder messageDisplayed = new StringBuilder();
+                messageDisplayed.append("[");
+                messageDisplayed
+                        .append(fieldName.substring(fieldName.lastIndexOf(".") + IGNORE_DOT_POST).toUpperCase());
+                messageDisplayed.append("] - ");
+                messageDisplayed.append(error.getDefaultMessage());
 
-				validationErrors.add(new ErrorResponse(messageDisplayed.toString()));
-			}
-		}
+                validationErrors.add(new ErrorResponse(messageDisplayed.toString()));
+            }
+        }
 
-		return validationErrors;
-	}
+        return validationErrors;
+    }
 
-	@ResponseStatus(NOT_FOUND)
-	@ExceptionHandler({ NotFoundException.class })
-	public @ResponseBody ResponseResponse handlerBusinessRules(NotFoundException exception) {
-		log.info(exception.getMessage());
-		return new ResponseResponse(env.getProperty("validation.not.found"));
-	}
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler({NotFoundException.class})
+    public @ResponseBody
+    ResponseResponse handlerBusinessRules(NotFoundException exception) {
+        log.info(exception.getMessage());
+        return new ResponseResponse(env.getProperty("validation.not.found"));
+    }
 
-	@ResponseStatus(UNPROCESSABLE_ENTITY)
-	@ExceptionHandler({ DocumentAlreadyExistsException.class })
-	public @ResponseBody ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
-		log.info(exception.getMessage());
-		return new ResponseResponse(env.getProperty("validation.document.already.exists"));
-	}
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler({DocumentAlreadyExistsException.class})
+    public @ResponseBody
+    ResponseResponse handlerBusinessRules(DocumentAlreadyExistsException exception) {
+        log.info(exception.getMessage());
+        return new ResponseResponse(env.getProperty("validation.document.already.exists"));
+    }
 
-	@ResponseStatus(BAD_REQUEST)
-	@ExceptionHandler({ PaginationSizeLimitExceededException.class })
-	public @ResponseBody ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
-		log.info(exception.getMessage());
-		return new ResponseResponse(env.getProperty("validation.pagination.size.limit.exceeded"));
-	}
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler({PaginationSizeLimitExceededException.class})
+    public @ResponseBody
+    ResponseResponse handlerBusinessRules(PaginationSizeLimitExceededException exception) {
+        log.info(exception.getMessage());
+        return new ResponseResponse(env.getProperty("validation.pagination.size.limit.exceeded"));
+    }
 
-	@ResponseStatus(INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody ErrorResponse runtimeExceptionError(Exception exception) {
-		log.info(exception.getMessage());
-		return new ErrorResponse(env.getProperty("validation.internal.error"));
-	}
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public @ResponseBody
+    ErrorResponse runtimeExceptionError(Exception exception) {
+        log.info(exception.getMessage());
+        return new ErrorResponse(env.getProperty("validation.internal.error"));
+    }
 
 }

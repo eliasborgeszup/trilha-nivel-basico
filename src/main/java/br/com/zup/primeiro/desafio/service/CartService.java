@@ -1,18 +1,21 @@
 package br.com.zup.primeiro.desafio.service;
 
+import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.request.cart.UpdateCartRequest;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CartService {
-    public String create(String idComic);
+    String create(String customerId);
 
-    public Cart findById(String idCart);
+    Cart findById(String idCart);
 
-    public Page<Cart> findAll(Pageable page);
+    Cart findByCustomerId(String customerId);
 
-    public String update(String idCart, UpdateCartRequest updateCartRequest);
+    Page<Cart> findAll(Pageable page);
 
-    public void delete(String idCart);
+    String update(String idCart, UpdateCartRequest request);
+
+    void delete(String idCart);
 }
