@@ -7,6 +7,7 @@ import br.com.zup.primeiro.desafio.controller.response.marvel.ResultsResponse;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import br.com.zup.primeiro.desafio.entity.CartItem;
 import br.com.zup.primeiro.desafio.entity.Customer;
+import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
 import br.com.zup.primeiro.desafio.repository.CartItemRepository;
 import br.com.zup.primeiro.desafio.repository.CartRepository;
 import br.com.zup.primeiro.desafio.service.CartItemService;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+
+import static java.lang.String.format;
 
 @AllArgsConstructor
 @Service
@@ -41,7 +44,12 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     public CartItem findById(String idCart) {
-        return null;
+        return repository.findById(idCart).orElseThrow(() -> {
+            log.error("CartItem not found, idCart = {} not found", idCart);
+
+            throw new NotFoundException(format("CartItemServiceImpl: findById, idCart = {} not found",
+                    idCart));
+        });
     }
 
     public Page<CartItem> findAll(Pageable page) {
