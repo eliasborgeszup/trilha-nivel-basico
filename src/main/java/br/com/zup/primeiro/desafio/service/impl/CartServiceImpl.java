@@ -27,8 +27,7 @@ public class CartServiceImpl implements CartService {
     public String create(String customerId) {
         return repository.findByCustomerId(customerId)
                 .map(Cart::getId)
-                .or(() -> Optional.ofNullable(Cart.create(repository, customerService.findById(customerId))))
-                .get();
+                .orElseGet(() -> Cart.create(repository, customerService.findById(customerId)));
     }
 
     public Cart findById(String id) {
@@ -37,13 +36,13 @@ public class CartServiceImpl implements CartService {
 
             throw new NotFoundException(format("CartServiceImpl: findById, idCart = {} not found",
                     id));
-
         });
     }
 
     public Cart findByCustomerId(String customerId) {
         return repository.findByCustomerId(customerId).orElseThrow(() -> {
             log.error("Cart not found, id customer = {} not found", customerId);
+
             throw new NotFoundException(format("CartServiceImpl: findByCustomerId, id customer = {} not found",
                     customerId));
         });

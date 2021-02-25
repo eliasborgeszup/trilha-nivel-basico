@@ -44,9 +44,9 @@ public class CustomerController {
     @ResponseStatus(OK)
     @GetMapping
     public Page<CustomerResponse> findAll(
-            @PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
+            @PageableDefault(sort = "name", direction = ASC, size = 20) Pageable page) {
 
-        PageSizeValidator.validate(SIZE_MAX_PAGE, page.getPageSize());
+        PageSizeValidator.validate("CustomerController", SIZE_MAX_PAGE, page.getPageSize());
 
         return service.findAll(page).map(CustomerResponse::fromCustomer);
     }

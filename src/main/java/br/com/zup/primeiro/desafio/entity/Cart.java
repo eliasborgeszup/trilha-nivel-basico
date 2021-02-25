@@ -16,8 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-@ToString
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString
 public class Cart {
     @Id
     @Column(updatable = false, unique = true, nullable = false)

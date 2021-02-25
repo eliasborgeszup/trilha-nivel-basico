@@ -1,24 +1,22 @@
 package br.com.zup.primeiro.desafio.entity;
 
 import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
+import br.com.zup.primeiro.desafio.controller.request.cartItem.UpdateCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.response.marvel.ResultsResponse;
-import br.com.zup.primeiro.desafio.enums.Status;
 import br.com.zup.primeiro.desafio.repository.CartItemRepository;
-import br.com.zup.primeiro.desafio.repository.CartRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
-@ToString
+@EqualsAndHashCode
+@Slf4j
 public class CartItem {
     @Id
     @Column(updatable = false, unique = true, nullable = false)
@@ -41,13 +39,23 @@ public class CartItem {
     @JsonBackReference
     private Cart cart;
 
-    public String create(CartItemRepository repository, CreatedCartItemRequest request, ResultsResponse resultsComicsResponse, Cart cart) {
-        this.id = UUID.randomUUID().toString();
-        this.externalId = resultsComicsResponse.getId();
-        this.title = resultsComicsResponse.getTitle();
-        this.url = resultsComicsResponse.getResourceURI();
+    public static String create(CartItemRepository repository, CreatedCartItemRequest request, ResultsResponse resultsComicsResponse, Cart cart) {
+        return repository.save(new CartItem(UUID.randomUUID().toString(),
+                resultsComicsResponse.getId(),
+                resultsComicsResponse.getTitle(),
+                resultsComicsResponse.getResourceURI(),
+                request.getQuantity(),
+                cart)).id;
+    }
+
+    public static void delete(CartItem cartItem, CartItemRepository repository) {
+        log.info("Delete CardItem = {}", cartItem);
+
+        repository.delete(cartItem);
+    }
+
+    public String update(UpdateCartItemRequest request, CartItemRepository repository) {
         this.quantity = request.getQuantity();
-        this.cart = cart;
 
         return repository.save(this).id;
     }

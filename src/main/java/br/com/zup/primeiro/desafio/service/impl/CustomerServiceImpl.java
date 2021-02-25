@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public String create(CreateCustomerRequest request) {
         if (repository.existsByCpf(request.getCpf())) {
-            log.error("Customer not created, customer = {} register", request.getCpf());
+            log.error("Customer not created, cpf customer = {} register", request.getCpf());
 
             throw new DocumentAlreadyExistsException(
                     format("CustomerServiceImpl: create, customer = {} register",
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         log.info("Create customer = {}", request);
-        return new Customer().create(request, repository);
+        return Customer.create(request, repository);
     }
 
     public Page<Customer> findAll(Pageable page) {
@@ -51,6 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findById(String id) {
         return repository.findById(id).orElseThrow(() -> {
             log.error("Customer not found, id customer = {} not found", id);
+
             throw new NotFoundException(format("CustomerServiceImpl: findById, id customer = {} not found",
                     id));
         });
@@ -58,9 +59,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     public void delete(String cpf) {
         Customer customer = repository.findByCpf(cpf).orElseThrow(() -> {
-            log.error("Customer not update, customer = {} not found", cpf);
+            log.error("Customer not delete, cpfCustomer = {} not found", cpf);
 
-            throw new NotFoundException(format("CustomerServiceImpl: delete, customer = %s not found", cpf));
+            throw new NotFoundException(format("CustomerServiceImpl: delete, cpf customer = %s not found", cpf));
         });
 
         log.info("Delete customer = {}", customer);
@@ -71,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = repository.findByCpf(cpf).orElseThrow(() -> {
             log.error("Costumer not update, costumer = {} not found", cpf);
 
-            throw new NotFoundException(format("CustomerServiceImpl: update, customer = %s not found", cpf));
+            throw new NotFoundException(format("CustomerServiceImpl: update, cpfc customer = %s not found", cpf));
         });
 
         log.info("Update customer, cpf = {}, customerBefore = {}, customerAfter = {}",
@@ -81,5 +82,4 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customer.update(request, repository);
     }
-
 }

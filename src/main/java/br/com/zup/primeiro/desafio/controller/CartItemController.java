@@ -1,18 +1,22 @@
 package br.com.zup.primeiro.desafio.controller;
 
+import static org.springframework.http.HttpStatus.*;
 
+import static org.springframework.data.domain.Sort.Direction.ASC;
+
+import br.com.zup.primeiro.desafio.config.PageSizeValidator;
 import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
-import br.com.zup.primeiro.desafio.controller.request.cart.UpdateCartRequest;
+import br.com.zup.primeiro.desafio.controller.request.cartItem.UpdateCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.response.cartItem.CartItemIDResponse;
 import br.com.zup.primeiro.desafio.controller.response.cartItem.CartItemResponse;
-import br.com.zup.primeiro.desafio.entity.CartItem;
 import br.com.zup.primeiro.desafio.service.CartItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import static org.springframework.http.HttpStatus.*;
 
 @AllArgsConstructor
 @RestController
@@ -24,35 +28,35 @@ public class CartItemController {
 
     @ResponseStatus(CREATED)
     @PostMapping(value = "/{idComics}")
-    public CartItemIDResponse created(@PathVariable Long idComics, @Valid @RequestBody CreatedCartItemRequest request) {
+    public CartItemIDResponse create(@PathVariable Long idComics, @Valid @RequestBody CreatedCartItemRequest request) {
         return new CartItemIDResponse(service.create(idComics, request));
     }
 
     @ResponseStatus(OK)
-    @GetMapping(value = "/{idCart}")
-    public CartItemResponse findById(@PathVariable String idCart) {
-        return CartItemResponse.fromCartItem(service.findById(idCart));
+    @GetMapping(value = "/{id}")
+    public CartItemResponse findById(@PathVariable String id) {
+        return CartItemResponse.fromCartItem(service.findById(id));
     }
 
-/*    @ResponseStatus(OK)
+    @ResponseStatus(OK)
     @GetMapping
-    public Page<CartItem> findAll(
-            @PageableDefault(sort = "name", direction = ASC, page = 0, size = 20) Pageable page) {
+    public Page<CartItemResponse> findAll(
+            @PageableDefault(sort = "name", direction = ASC, size = 20) Pageable page) {
 
-        PageSizeValidator.validate(SIZE_MAX_PAGE, page.getPageSize());
+        PageSizeValidator.validate("CartItemController", SIZE_MAX_PAGE, page.getPageSize());
 
-        return service.findAll(page).map(CartItem::fromCart);
-    }*/
+        return service.findAll(page).map(CartItemResponse::fromCartItem);
+    }
 
     @ResponseStatus(OK)
-    @PutMapping(value = "/{idCart}")
-    public String update(@PathVariable String idCart, @Valid @RequestBody UpdateCartRequest request) {
-        return service.update(idCart, request);
+    @PutMapping(value = "/{id}")
+    public CartItemIDResponse update(@PathVariable String id, @Valid @RequestBody UpdateCartItemRequest request) {
+        return new CartItemIDResponse(service.update(id, request));
     }
 
     @ResponseStatus(NO_CONTENT)
-    @DeleteMapping(value = "/{idCart}")
-    public void delete(@PathVariable String idCart) {
-        service.delete(idCart);
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable String id) {
+        service.delete(id);
     }
 }

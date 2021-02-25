@@ -16,6 +16,6 @@ public class UpdateCartRequest {
     @NotBlank(message = "{validation.blank}")
     private String idComics;
 
-    @Min(value = 0, message = "{validation.size}")
+    @Min(value = 1, message = "{validation.size}")
     private Integer quantity;
 }

@@ -1,11 +1,7 @@
 package br.com.zup.primeiro.desafio.controller.response.cartItem;
 
-import br.com.zup.primeiro.desafio.entity.Cart;
 import br.com.zup.primeiro.desafio.entity.CartItem;
-import br.com.zup.primeiro.desafio.entity.Customer;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
