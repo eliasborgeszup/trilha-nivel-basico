@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
 import br.com.zup.primeiro.desafio.config.PageSizeValidator;
-import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
+import br.com.zup.primeiro.desafio.controller.request.cartItem.CreateCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.request.cartItem.UpdateCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.response.cartItem.CartItemIDResponse;
 import br.com.zup.primeiro.desafio.controller.response.cartItem.CartItemResponse;
@@ -28,7 +28,7 @@ public class CartItemController {
 
     @ResponseStatus(CREATED)
     @PostMapping(value = "/{idComics}")
-    public CartItemIDResponse create(@PathVariable Long idComics, @Valid @RequestBody CreatedCartItemRequest request) {
+    public CartItemIDResponse create(@PathVariable Long idComics, @Valid @RequestBody CreateCartItemRequest request) {
         return new CartItemIDResponse(service.create(idComics, request));
     }
 
@@ -41,7 +41,7 @@ public class CartItemController {
     @ResponseStatus(OK)
     @GetMapping
     public Page<CartItemResponse> findAll(
-            @PageableDefault(sort = "name", direction = ASC, size = 20) Pageable page) {
+            @PageableDefault(sort = "quantity", direction = ASC, size = 20) Pageable page) {
 
         PageSizeValidator.validate("CartItemController", SIZE_MAX_PAGE, page.getPageSize());
 

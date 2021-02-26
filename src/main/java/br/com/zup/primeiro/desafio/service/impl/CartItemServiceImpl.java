@@ -1,6 +1,6 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
-import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
+import br.com.zup.primeiro.desafio.controller.request.cartItem.CreateCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.request.cartItem.UpdateCartItemRequest;
 import br.com.zup.primeiro.desafio.entity.CartItem;
 import br.com.zup.primeiro.desafio.exceptions.NotFoundException;
@@ -26,7 +26,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final MarvelComicsService marvelService;
 
-    public String create(Long idComic, CreatedCartItemRequest request) {
+    public String create(Long idComic, CreateCartItemRequest request) {
         log.info("Create createdCartItemRequest = {}", request);
 
         return CartItem.create(repository,
@@ -67,7 +67,9 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem.delete(repository.findById(id).orElseThrow(() -> {
             log.error("CartItem not delete, id CardItem = {} not found", id);
 
-            throw new NotFoundException(format("CartItemServiceImpl: delete, id CardItem = %s not found", id));
+            throw new NotFoundException(format("CartItemServiceImpl: delete, idCardItem = %s not found", id));
         }), repository);
+
+        log.info("Delete idCardItem = {}", id);
     }
 }

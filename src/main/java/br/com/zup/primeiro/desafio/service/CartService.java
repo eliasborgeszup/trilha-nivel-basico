@@ -1,6 +1,5 @@
 package br.com.zup.primeiro.desafio.service;
 
-import br.com.zup.primeiro.desafio.controller.request.cartItem.CreatedCartItemRequest;
 import br.com.zup.primeiro.desafio.controller.request.cart.UpdateCartRequest;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import org.springframework.data.domain.Page;

@@ -145,7 +145,7 @@ public class CustomerServiceImplTest {
         service.delete(buildCPF());
     }
 
-    private Customer buildCustomer() {
+    public static Customer buildCustomer() {
         return new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
                 "eliasborges@zup.com.br", "34992454428", "Rua X");
     }

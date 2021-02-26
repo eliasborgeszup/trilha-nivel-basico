@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class CreatedCartItemRequest {
+public class CreateCartItemRequest {
     @Min(value = 1, message = "{validation.size}")
     private final Integer quantity;
 

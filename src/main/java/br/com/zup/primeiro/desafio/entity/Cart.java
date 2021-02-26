@@ -30,13 +30,14 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ToString.Exclude
     private List<CartItem> cartItemList;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
-    private Cart(String id, Customer customer, Status status) {
+    public Cart(String id, Customer customer, Status status) {
         this.id = id;
         this.customer = customer;
         this.status = status;
