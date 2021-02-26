@@ -14,6 +14,8 @@ public interface CustomerService {
 
 	public Customer findByCpf(String cpf);
 
+	public Customer findById(String id);
+
 	public String update(String cpf, UpdateCustomerRequest request);
 
 	public void delete(String cpf);

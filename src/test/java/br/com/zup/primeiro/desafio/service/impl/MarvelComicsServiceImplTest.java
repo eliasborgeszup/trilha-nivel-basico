@@ -41,7 +41,7 @@ public class MarvelComicsServiceImplTest {
 
 	}
 
-	private ComicsResponse buildComicsResponse() {
+	public static ComicsResponse buildComicsResponse() {
 		List<ResultsResponse> results = buildListResultsResponse();
 		DataResponse data = new DataResponse(results);
 
@@ -49,11 +49,11 @@ public class MarvelComicsServiceImplTest {
 				"<a href=\"http://marvel.com\">Data provided by Marvel. © 2021 MARVEL</a>", data);
 	}
 
-	private List<ResultsResponse> buildListResultsResponse() {
+	public static List<ResultsResponse> buildListResultsResponse() {
 		List<ResultsResponse> results = new ArrayList<>();
 
-		ResultsResponse result82967 = new ResultsResponse(82967L, "Marvel Previews (2017)");
-		ResultsResponse result82970 = new ResultsResponse(82970L, "Marvel Previews (2017)");
+		ResultsResponse result82967 = new ResultsResponse(82967L, "Marvel Previews (2017)", "http://gateway.marvel.com/v1/public/comics/82967");
+		ResultsResponse result82970 = new ResultsResponse(82970L, "Marvel Previews (2017)", "http://gateway.marvel.com/v1/public/comics/82967");
 
 		results.add(result82967);
 		results.add(result82970);
