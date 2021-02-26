@@ -1,6 +1,8 @@
 package br.com.zup.primeiro.desafio.service.impl;
 
 import br.com.zup.primeiro.desafio.controller.request.cartItem.CreateCartItemRequest;
+import br.com.zup.primeiro.desafio.controller.request.cartItem.UpdateCartItemRequest;
+import br.com.zup.primeiro.desafio.controller.request.customer.UpdateCustomerRequest;
 import br.com.zup.primeiro.desafio.controller.response.marvel.ComicsResponse;
 import br.com.zup.primeiro.desafio.entity.Cart;
 import br.com.zup.primeiro.desafio.entity.CartItem;
@@ -121,6 +123,35 @@ public class CartItemServiceImplTest {
     }
 
     @Test
+    public void shouldUpdateCustomerAndReturnId() {
+        // Given
+        UpdateCartItemRequest cartItemRequest = buildUpdateCustomerRequest();
+        CartItem cartItem = buildCartItem();
+        when(repository.findById(buildId())).thenReturn(Optional.of(cartItem));
+        when(repository.save(any())).thenReturn(cartItem);
+
+        // When
+        String id = service.update(buildId(), cartItemRequest);
+
+        // Then
+        assertEquals(id, cartItem.getId());
+    }
+
+    private UpdateCartItemRequest buildUpdateCustomerRequest() {
+        return new UpdateCartItemRequest(10);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldNotUpdateCustomerWhenCpfNotExists() {
+        // Given
+        UpdateCartItemRequest cartItemRequest = buildUpdateCustomerRequest();
+        when(repository.findById(buildId())).thenReturn(Optional.empty());
+
+        // When
+        service.update(buildId(), cartItemRequest);
+    }
+
+    @Test
     public void shouldDeleteCustomer() {
         // Given
         CartItem cartItem = buildCartItem();
@@ -141,14 +172,6 @@ public class CartItemServiceImplTest {
         // When
         service.delete(buildId());
     }
-/*
-    @Test
-    public void update() {
-    }
-
-    @Test
-    public void delete() {
-    }*/
 
     private String buildId() {
         return "8f8a0875-f5ef-4301-9da7-70a170445013";

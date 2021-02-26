@@ -2,10 +2,7 @@ package br.com.zup.primeiro.desafio.controller.request.cartItem;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 
@@ -20,4 +17,5 @@ public class UpdateCartItemRequest {
     public UpdateCartItemRequest(@JsonProperty ("quantity") Integer quantity) {
         this.quantity = quantity;
     }
+
 }
