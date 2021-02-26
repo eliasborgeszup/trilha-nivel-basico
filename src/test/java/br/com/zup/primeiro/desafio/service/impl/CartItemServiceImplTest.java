@@ -120,6 +120,27 @@ public class CartItemServiceImplTest {
         assertEquals(cartItems, cartItemsBD);
     }
 
+    @Test
+    public void shouldDeleteCustomer() {
+        // Given
+        CartItem cartItem = buildCartItem();
+        when(repository.findById(buildId())).thenReturn(Optional.of(cartItem));
+
+        // When
+        service.delete(buildId());
+
+        // Then
+        verify(repository).delete(cartItem);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldNotDeleteCustomerWhenCpfNotExists() {
+        // Given
+        when(repository.findById(buildId())).thenReturn(Optional.empty());
+
+        // When
+        service.delete(buildId());
+    }
 /*
     @Test
     public void update() {
