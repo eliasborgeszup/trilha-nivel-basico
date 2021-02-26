@@ -162,13 +162,10 @@ public class CustomerServiceImplTest {
     private List<Customer> buildListCustomer() {
         List<Customer> customers = new ArrayList<>();
 
-        Customer customerElias = new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
-                "eliasborges@zup.com.br", "34992454428", "Rua X");
-        Customer customerIsrael = new Customer(UUID.randomUUID().toString(), "Israel", LocalDate.now(), "86202508094",
-                "israel.jesus2@zup.com.br", "34992454428", "Rua X");
-
-        customers.add(customerElias);
-        customers.add(customerIsrael);
+        customers.add(new Customer(UUID.randomUUID().toString(), "Elias", LocalDate.now(), "59522283053",
+                "eliasborges@zup.com.br", "34992454428", "Rua X"));
+        customers.add(new Customer(UUID.randomUUID().toString(), "Israel", LocalDate.now(), "86202508094",
+                "israel.jesus2@zup.com.br", "34992454428", "Rua X"));
 
         return customers;
     }
